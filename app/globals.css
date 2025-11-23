@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-void text-white;
+    overflow-x: hidden;
+  }
+
+  html.lenis {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  .grain {
+    position: relative;
+  }
+
+  .grain::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    width: 200%;
+    height: 200vh;
+    background: transparent url('/grain.png') repeat 0 0;
+    background-repeat: repeat;
+    animation: grain 8s steps(10) infinite;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-white;
+  }
+
+  .blend-difference {
+    mix-blend-mode: difference;
+  }
+}
