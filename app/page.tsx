@@ -1,4 +1,5 @@
-import { HeroCanvas, HeroSection } from "@/components/hero";
+import { SceneCanvas } from "@/components/canvas/SceneCanvas";
+import { HeroSection } from "@/components/hero";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { About } from "@/components/ui/About";
 import { Work } from "@/components/ui/Work";
@@ -9,7 +10,7 @@ export default function Home() {
   return (
     <main className="relative">
       <CustomCursor />
-      <HeroCanvas />
+      <SceneCanvas />
 
       <div className="relative z-10">
         <HeroSection />
