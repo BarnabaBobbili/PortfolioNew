@@ -54,16 +54,16 @@ vec3 createNebula(vec2 uv, float time) {
   // Combine layers
   float noise = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
 
-  // Deep space color palette
-  vec3 obsidian = vec3(0.02, 0.02, 0.05);
-  vec3 deepViolet = vec3(0.05, 0.02, 0.12);
-  vec3 faintTeal = vec3(0.02, 0.08, 0.12);
-  vec3 voidBlack = vec3(0.01, 0.01, 0.02);
+  // Deep space color palette - darker blue theme (matching original)
+  vec3 voidBlack = vec3(0.04, 0.04, 0.06);
+  vec3 deepBlue = vec3(0.05, 0.05, 0.1);
+  vec3 midBlue = vec3(0.06, 0.06, 0.12);
+  vec3 lightBlue = vec3(0.08, 0.10, 0.15);
 
   // Color mixing based on noise
-  vec3 color = mix(voidBlack, obsidian, smoothstep(0.2, 0.4, noise));
-  color = mix(color, deepViolet, smoothstep(0.4, 0.6, noise));
-  color = mix(color, faintTeal, smoothstep(0.6, 0.8, noise));
+  vec3 color = mix(voidBlack, deepBlue, smoothstep(0.2, 0.4, noise));
+  color = mix(color, midBlue, smoothstep(0.4, 0.6, noise));
+  color = mix(color, lightBlue, smoothstep(0.6, 0.8, noise));
 
   // Add some bright spots (distant stars/energy)
   float brightSpots = fbm(p * 8.0 + time * 0.03);
