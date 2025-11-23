@@ -1,6 +1,5 @@
-import { SceneCanvas } from "@/components/canvas/SceneCanvas";
+import { HeroCanvas, HeroSection } from "@/components/hero";
 import { CustomCursor } from "@/components/ui/CustomCursor";
-import { Hero } from "@/components/ui/Hero";
 import { About } from "@/components/ui/About";
 import { Work } from "@/components/ui/Work";
 import { Contact } from "@/components/ui/Contact";
@@ -10,10 +9,10 @@ export default function Home() {
   return (
     <main className="relative">
       <CustomCursor />
-      <SceneCanvas />
+      <HeroCanvas />
 
       <div className="relative z-10">
-        <Hero />
+        <HeroSection />
         <About />
         <Work />
         <InfiniteMarquee text="CREATIVE DEVELOPER" baseVelocity={2} />
