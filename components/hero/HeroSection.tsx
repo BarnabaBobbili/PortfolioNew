@@ -118,7 +118,7 @@ export function HeroSection() {
             <div className="mb-4">
               <DecodeText
                 text="CREATIVE"
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-200"
+                className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-100 to-blue-100"
                 delay={500}
                 speed={40}
               />
@@ -126,7 +126,7 @@ export function HeroSection() {
             <div>
               <DecodeText
                 text="TECHNOLOGIST"
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-blue-100 to-white"
+                className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-gray-100 to-white"
                 delay={800}
                 speed={40}
               />
@@ -140,7 +140,7 @@ export function HeroSection() {
             animate={{ opacity: 0 }}
             transition={{ duration: 2, delay: 1.5 }}
           >
-            <div className="w-full h-full bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent blur-xl" />
+            <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-500/10 to-transparent blur-xl" />
           </motion.div>
         </div>
 
@@ -149,7 +149,7 @@ export function HeroSection() {
           ref={subtitleRef}
           className="text-xl md:text-2xl lg:text-3xl font-mono text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed"
         >
-          <span className="text-cyan-400">[SYSTEM.INIT]</span> Architecting
+          <span className="text-blue-300">[SYSTEM.INIT]</span> Architecting
           immersive digital experiences at the intersection of{" "}
           <span className="text-white">art</span>,{" "}
           <span className="text-white">code</span>, and{" "}
@@ -158,10 +158,10 @@ export function HeroSection() {
 
         {/* CTA Buttons */}
         <div ref={ctaRef} className="flex gap-6 justify-center items-center">
-          <MagneticButton className="group relative px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-mono font-medium rounded-full border border-white/20 hover:border-cyan-400/50 transition-all overflow-hidden">
+          <MagneticButton className="group relative px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-mono font-medium rounded-full border border-white/20 hover:border-blue-400/50 transition-all overflow-hidden">
             <span className="relative z-10">EXPLORE PROJECTS</span>
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20"
+              className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-blue-600/20"
               initial={{ x: "-100%" }}
               whileHover={{ x: "100%" }}
               transition={{ duration: 0.6 }}
@@ -192,7 +192,7 @@ export function HeroSection() {
             </span>
             <div className="w-6 h-10 border-2 border-white/20 rounded-full p-1">
               <motion.div
-                className="w-1.5 h-1.5 bg-cyan-400 rounded-full mx-auto shadow-lg shadow-cyan-400/50"
+                className="w-1.5 h-1.5 bg-blue-300 rounded-full mx-auto shadow-lg shadow-blue-300/50"
                 animate={{
                   y: [0, 20, 0],
                 }}
@@ -207,10 +207,10 @@ export function HeroSection() {
         </motion.div>
 
         {/* Decorative corner brackets */}
-        <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-cyan-400/30" />
-        <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-cyan-400/30" />
-        <div className="absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 border-cyan-400/30" />
-        <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-cyan-400/30" />
+        <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-blue-300/30" />
+        <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-blue-300/30" />
+        <div className="absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 border-blue-300/30" />
+        <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-blue-300/30" />
       </div>
     </section>
   );
