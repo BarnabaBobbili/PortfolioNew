@@ -2,14 +2,12 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { MeshTransmissionMaterial, useGLTF } from "@react-three/drei";
+import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
-// @ts-ignore
-import liquidVertex from "@/shaders/liquid.vert";
 
 export function LiquidArtifact() {
   const meshRef = useRef<THREE.Mesh>(null);
-  const { pointer, viewport } = useThree();
+  const { pointer } = useThree();
   const targetRotation = useRef(new THREE.Euler(0, 0, 0));
 
   // Create heavily subdivided icosphere for smooth displacement
@@ -18,25 +16,8 @@ export function LiquidArtifact() {
     return geo;
   }, []);
 
-  const uniforms = useMemo(
-    () => ({
-      uTime: { value: 0 },
-      uFrequency: { value: 2.0 },
-      uAmplitude: { value: 0.25 },
-      uColor: { value: new THREE.Color(0.3, 0.5, 0.9) },
-      uRefractionStrength: { value: 0.15 },
-      uTexture: { value: null },
-    }),
-    []
-  );
-
   useFrame((state) => {
     if (meshRef.current) {
-      const material = meshRef.current.material as THREE.ShaderMaterial;
-      if (material.uniforms) {
-        material.uniforms.uTime.value = state.clock.elapsedTime;
-      }
-
       // Smooth rotation following mouse
       targetRotation.current.y = pointer.x * 0.5;
       targetRotation.current.x = pointer.y * 0.3;
