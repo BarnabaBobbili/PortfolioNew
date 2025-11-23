@@ -2,9 +2,9 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import { StarField } from "./StarField";
-import { LiquidHero } from "./LiquidHero";
-import { EffectComposer, Bloom, ChromaticAberration } from "@react-three/postprocessing";
+import { VoidBackground } from "@/components/hero/VoidBackground";
+import { LiquidArtifact } from "@/components/hero/LiquidArtifact";
+import { EffectComposer, Bloom, ChromaticAberration, Noise } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
 
@@ -20,8 +20,8 @@ export function SceneCanvas() {
         }}
       >
         <Suspense fallback={null}>
-          <StarField />
-          <LiquidHero />
+          <VoidBackground />
+          <LiquidArtifact />
 
           <EffectComposer>
             <Bloom
@@ -33,6 +33,11 @@ export function SceneCanvas() {
             <ChromaticAberration
               offset={new THREE.Vector2(0.002, 0.002)}
               blendFunction={BlendFunction.NORMAL}
+            />
+            <Noise
+              premultiply
+              blendFunction={BlendFunction.OVERLAY}
+              opacity={0.1}
             />
           </EffectComposer>
         </Suspense>

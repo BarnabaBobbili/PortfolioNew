@@ -10,9 +10,9 @@ export function LiquidArtifact() {
   const { pointer } = useThree();
   const targetRotation = useRef(new THREE.Euler(0, 0, 0));
 
-  // Create heavily subdivided icosphere for smooth displacement
+  // Create optimized icosphere geometry
   const geometry = useMemo(() => {
-    const geo = new THREE.IcosahedronGeometry(1.2, 128);
+    const geo = new THREE.IcosahedronGeometry(1.2, 32);
     return geo;
   }, []);
 
@@ -48,17 +48,17 @@ export function LiquidArtifact() {
       <mesh ref={meshRef} geometry={geometry}>
         <MeshTransmissionMaterial
           backside
-          samples={16}
-          resolution={512}
-          transmission={1}
+          samples={4}
+          resolution={256}
+          transmission={0.95}
           roughness={0.2}
-          thickness={1.5}
-          ior={1.5}
-          chromaticAberration={0.5}
-          anisotropy={0.5}
-          distortion={0.3}
-          distortionScale={0.5}
-          temporalDistortion={0.1}
+          thickness={1.2}
+          ior={1.45}
+          chromaticAberration={0.3}
+          anisotropy={0.3}
+          distortion={0.2}
+          distortionScale={0.3}
+          temporalDistortion={0.05}
           clearcoat={1}
           attenuationDistance={0.5}
           attenuationColor="#88ccff"
@@ -68,7 +68,7 @@ export function LiquidArtifact() {
 
       {/* Inner glow sphere */}
       <mesh scale={0.8}>
-        <sphereGeometry args={[1, 64, 64]} />
+        <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial
           color="#4488ff"
           transparent
