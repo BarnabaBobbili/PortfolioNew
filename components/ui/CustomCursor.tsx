@@ -48,14 +48,6 @@ export function CustomCursor() {
           translateX: "-50%",
           translateY: "-50%",
         }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       >
         <div className="w-full h-full rounded-full border border-white opacity-30" />
       </motion.div>

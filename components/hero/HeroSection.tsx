@@ -117,7 +117,7 @@ export function HeroSection() {
           <h1 className="text-7xl md:text-9xl lg:text-[12rem] font-serif font-bold leading-none">
             <div className="mb-4">
               <DecodeText
-                text="CREATIVE"
+                text="BARNABA"
                 className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-100 to-blue-100"
                 delay={500}
                 speed={40}
@@ -125,7 +125,7 @@ export function HeroSection() {
             </div>
             <div>
               <DecodeText
-                text="TECHNOLOGIST"
+                text="BOBBILI"
                 className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-gray-100 to-white"
                 delay={800}
                 speed={40}

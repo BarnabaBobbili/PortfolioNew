@@ -15,8 +15,7 @@ const publications = [
     authors: "Your Name, et al.",
     year: "2024",
     link: "#",
-    doi: "10.1145/example.123456",
-    abstract: "Novel approach to real-time neural rendering in browser environments using WebGL 2.0",
+    tags: ["Neural Rendering", "WebGL 2.0", "Real-time"],
   },
   {
     id: 2,
@@ -25,8 +24,7 @@ const publications = [
     authors: "Your Name, Co-Author",
     year: "2024",
     link: "#",
-    doi: "10.1145/example.789012",
-    abstract: "Performance optimization strategies for complex 3D web applications",
+    tags: ["Performance", "Three.js", "Optimization"],
   },
   {
     id: 3,
@@ -35,8 +33,7 @@ const publications = [
     authors: "Your Name, et al.",
     year: "2023",
     link: "#",
-    doi: "10.1109/example.345678",
-    abstract: "Implementation of GPU-accelerated physics simulations in web environments",
+    tags: ["Physics", "Animation", "GPU"],
   },
 ];
 
@@ -48,18 +45,14 @@ export function Publications() {
 
     const items = sectionRef.current.querySelectorAll(".publication-item");
 
-    items.forEach((item, index) => {
+    items.forEach((item) => {
       gsap.fromTo(
         item,
-        {
-          opacity: 0,
-          x: -50,
-        },
+        { opacity: 0, y: 100 },
         {
           opacity: 1,
-          x: 0,
-          duration: 1,
-          delay: index * 0.1,
+          y: 0,
+          duration: 1.2,
           ease: "power3.out",
           scrollTrigger: {
             trigger: item,
@@ -79,75 +72,73 @@ export function Publications() {
     >
       <div className="max-w-7xl mx-auto">
         <motion.h2
-          className="text-6xl md:text-8xl font-serif font-bold mb-16 text-gradient"
+          className="text-6xl md:text-8xl font-serif font-bold mb-24 text-gradient"
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.2 }}
           viewport={{ once: true }}
         >
-          Research & Publications
+          Publications
         </motion.h2>
 
-        <div className="space-y-8">
+        <div className="space-y-2">
           {publications.map((pub) => (
-            <motion.div
+            <div
               key={pub.id}
-              className="publication-item border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-8 hover:border-blue-400/30 transition-all"
+              className="publication-item border-b border-white/10 py-8 hover:bg-white/5 transition-colors"
             >
-              <div className="flex flex-col md:flex-row md:items-start gap-6">
-                <div className="flex-shrink-0">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-                    <span className="font-mono text-2xl font-bold text-white">
-                      {pub.year.slice(2)}
-                    </span>
-                  </div>
+              <div className="grid md:grid-cols-12 gap-8 items-center">
+                <div className="md:col-span-1">
+                  <span className="font-mono text-blue-400 text-sm">
+                    {pub.year}
+                  </span>
                 </div>
 
-                <div className="flex-grow">
-                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3">
+                <div className="md:col-span-5">
+                  <h3 className="text-3xl md:text-4xl font-serif font-bold mb-2 text-white">
                     {pub.title}
                   </h3>
-
-                  <div className="flex flex-wrap gap-3 mb-4">
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-mono">
-                      {pub.conference}
-                    </span>
-                    <span className="px-3 py-1 bg-white/10 text-gray-300 rounded-full text-sm font-mono">
-                      {pub.authors}
-                    </span>
-                  </div>
-
-                  <p className="text-gray-400 mb-4 leading-relaxed">
-                    {pub.abstract}
+                  <p className="text-gray-200 text-lg mb-4">
+                    {pub.conference} — {pub.authors}
                   </p>
 
-                  <div className="flex flex-wrap gap-4">
-                    <a
-                      href={pub.link}
-                      className="inline-flex items-center gap-2 px-4 py-2 border border-white/20 rounded-full hover:border-blue-400/50 hover:bg-white/5 transition-all font-mono text-sm"
+                  <a
+                    href={pub.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 border border-white/20 rounded-full hover:border-blue-400/50 hover:bg-white/5 transition-all font-mono text-sm"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    View Paper
+                  </a>
+                </div>
+
+                <div className="md:col-span-6">
+                  <div className="flex gap-3 flex-wrap">
+                    {pub.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-4 py-2 border border-white/30 rounded-full font-mono text-sm text-white"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                      PDF
-                    </a>
-                    <span className="inline-flex items-center gap-2 px-4 py-2 text-gray-400 font-mono text-sm">
-                      DOI: {pub.doi}
-                    </span>
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

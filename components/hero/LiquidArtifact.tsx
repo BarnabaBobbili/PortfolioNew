@@ -54,7 +54,7 @@ export function LiquidArtifact() {
 
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
-      <icosahedronGeometry args={[1, 64]} />
+      <icosahedronGeometry args={[1, 24]} />
       <shaderMaterial
         uniforms={uniforms}
         vertexShader={liquidVertex}

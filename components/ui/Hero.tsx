@@ -93,9 +93,9 @@ export function Hero() {
           className="text-7xl md:text-9xl font-serif font-bold mb-8 text-gradient leading-tight"
           style={{ willChange: "transform" }}
         >
-          {splitText("CREATIVE")}
+          {splitText("BARNABA")}
           <br />
-          {splitText("DEVELOPER")}
+          {splitText("BOBBILI")}
         </motion.h1>
 
         <motion.p

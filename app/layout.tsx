@@ -17,7 +17,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio | Creative Developer",
+  title: "Portfolio | Barnaba Bobbili",
   description: "A sci-fi artifact portfolio experience",
 };
 

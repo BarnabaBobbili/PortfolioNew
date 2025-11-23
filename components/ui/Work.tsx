@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { PortalCursor } from "./PortalCursor";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,7 +51,6 @@ const projects = [
 ];
 
 export function Work() {
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -83,13 +81,12 @@ export function Work() {
   }, []);
 
   return (
-    <>
-      <section
-        ref={sectionRef}
-        className="relative min-h-screen px-8 py-24"
-        id="work"
-      >
-        <div className="max-w-7xl mx-auto">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen px-8 py-24"
+      id="work"
+    >
+      <div className="max-w-7xl mx-auto">
           <motion.h2
             className="text-6xl md:text-8xl font-serif font-bold mb-24 text-gradient"
             initial={{ opacity: 0, x: -100 }}
@@ -105,12 +102,10 @@ export function Work() {
               <div
                 key={project.id}
                 className="project-item border-b border-white/10 py-8 hover:bg-white/5 transition-colors"
-                onMouseEnter={() => setHoveredProject(project.id)}
-                onMouseLeave={() => setHoveredProject(null)}
               >
                 <div className="grid md:grid-cols-12 gap-8 items-center">
                   <div className="md:col-span-1">
-                    <span className="font-mono text-gray-500 text-sm">
+                    <span className="font-mono text-blue-400 text-sm">
                       {project.year}
                     </span>
                   </div>
@@ -119,7 +114,7 @@ export function Work() {
                     <h3 className="text-4xl md:text-6xl font-serif font-bold mb-2 text-white">
                       {project.title}
                     </h3>
-                    <p className="text-gray-400 text-lg mb-4">
+                    <p className="text-gray-200 text-lg mb-4">
                       {project.description}
                     </p>
 
@@ -175,7 +170,7 @@ export function Work() {
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-4 py-2 border border-white/20 rounded-full font-mono text-sm text-gray-300"
+                          className="px-4 py-2 border border-white/30 rounded-full font-mono text-sm text-white"
                         >
                           {tag}
                         </span>
@@ -186,15 +181,7 @@ export function Work() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      <PortalCursor
-        isActive={hoveredProject !== null}
-        mediaUrl={
-          projects.find((p) => p.id === hoveredProject)?.preview
-        }
-      />
-    </>
+      </div>
+    </section>
   );
 }

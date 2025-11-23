@@ -71,11 +71,11 @@ export function About() {
 
         <div ref={contentRef} className="grid md:grid-cols-2 gap-12">
           <div>
-            <p className="text-lg md:text-xl text-gray-300 mb-6 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-100 mb-6 leading-relaxed">
               I'm a creative technologist specializing in immersive web
               experiences that blur the line between art and engineering.
             </p>
-            <p className="text-lg md:text-xl text-gray-300 mb-6 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-100 mb-6 leading-relaxed">
               With expertise in WebGL, Three.js, and modern frontend
               frameworks, I craft digital experiences that captivate and
               inspire.
@@ -86,7 +86,7 @@ export function About() {
             <h3 className="text-2xl font-mono font-semibold mb-6 text-white">
               Expertise
             </h3>
-            <ul className="space-y-3 font-mono text-gray-400">
+            <ul className="space-y-3 font-mono text-gray-200">
               {[
                 "WebGL & Three.js",
                 "React & Next.js",
