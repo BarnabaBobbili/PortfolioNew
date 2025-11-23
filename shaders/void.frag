@@ -5,84 +5,51 @@ uniform vec2 uResolution;
 varying vec2 vUv;
 varying vec3 vPosition;
 
-// Fractal Brownian Motion for organic noise
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+float random(vec2 st) {
+  return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
+float noise(vec2 st) {
+  vec2 i = floor(st);
+  vec2 f = fract(st);
+  float a = random(i);
+  float b = random(i + vec2(1.0, 0.0));
+  float c = random(i + vec2(0.0, 1.0));
+  float d = random(i + vec2(1.0, 1.0));
   vec2 u = f * f * (3.0 - 2.0 * f);
-
-  return mix(
-    mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
-    mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
-    u.y
-  );
-}
-
-float fbm(vec2 p) {
-  float value = 0.0;
-  float amplitude = 0.5;
-  float frequency = 1.0;
-
-  for(int i = 0; i < 4; i++) {
-    value += amplitude * noise(p * frequency);
-    frequency *= 2.0;
-    amplitude *= 0.5;
-  }
-
-  return value;
-}
-
-// Create nebulous, smoke-like patterns
-vec3 createNebula(vec2 uv, float time) {
-  vec2 p = uv * 2.0 - 1.0;
-  p.x *= uResolution.x / uResolution.y;
-
-  // Mouse influence - create distortion field
-  vec2 mousePos = uMouse * 2.0 - 1.0;
-  float mouseDist = length(p - mousePos);
-  vec2 mouseInfluence = (p - mousePos) / (mouseDist + 0.5) * 0.1;
-
-  // Multi-layered fractal noise for depth
-  float n1 = fbm(p * 1.5 + time * 0.02 + mouseInfluence);
-  float n2 = fbm(p * 2.0 - time * 0.015 + vec2(5.2, 1.3));
-  float n3 = fbm(p * 3.0 + time * 0.01 + vec2(9.2, 3.7));
-
-  // Combine layers
-  float noise = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
-
-  // Deep space color palette - darker blue theme (matching original)
-  vec3 voidBlack = vec3(0.04, 0.04, 0.06);
-  vec3 deepBlue = vec3(0.05, 0.05, 0.1);
-  vec3 midBlue = vec3(0.06, 0.06, 0.12);
-  vec3 lightBlue = vec3(0.08, 0.10, 0.15);
-
-  // Color mixing based on noise
-  vec3 color = mix(voidBlack, deepBlue, smoothstep(0.2, 0.4, noise));
-  color = mix(color, midBlue, smoothstep(0.4, 0.6, noise));
-  color = mix(color, lightBlue, smoothstep(0.6, 0.8, noise));
-
-  // Add some bright spots (distant stars/energy)
-  float brightSpots = fbm(p * 8.0 + time * 0.03);
-  brightSpots = pow(brightSpots, 4.0) * 0.3;
-  color += vec3(brightSpots);
-
-  // Vignette effect
-  float vignette = 1.0 - length(uv - 0.5) * 0.8;
-  color *= vignette;
-
-  return color;
+  return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
 void main() {
-  vec3 nebula = createNebula(vUv, uTime);
+  vec2 st = vUv;
 
-  // Add subtle scanlines for sci-fi feel
-  float scanline = sin(vUv.y * uResolution.y * 0.5 + uTime * 2.0) * 0.02;
-  nebula += vec3(scanline);
+  // Create star field
+  float stars = 0.0;
+  for (int i = 0; i < 3; i++) {
+    float scale = pow(2.0, float(i));
+    vec2 starUv = st * scale * 100.0;
+    float n = random(floor(starUv));
 
-  gl_FragColor = vec4(nebula, 1.0);
+    if (n > 0.99) {
+      vec2 starPos = fract(starUv);
+      float dist = length(starPos - 0.5);
+      float brightness = smoothstep(0.5, 0.0, dist);
+      stars += brightness * 0.3;
+    }
+  }
+
+  // Add mouse-reactive nebula effect
+  vec2 mouseInfluence = (uMouse - st) * 2.0;
+  float nebula = noise(st * 3.0 + uTime * 0.1 + mouseInfluence * 0.5);
+  nebula = smoothstep(0.3, 0.7, nebula);
+
+  // Combine effects
+  vec3 color = vec3(0.05, 0.05, 0.1);
+  color += vec3(stars);
+  color += vec3(0.1, 0.15, 0.3) * nebula * 0.3;
+
+  // Add subtle gradient
+  color += vec3(0.0, 0.02, 0.05) * (1.0 - st.y);
+
+  gl_FragColor = vec4(color, 1.0);
 }
