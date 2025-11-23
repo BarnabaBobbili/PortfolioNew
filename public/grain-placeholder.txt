@@ -1,0 +1,7 @@
+Note: Add a grain.png texture file here (200x200px noise texture).
+
+You can generate one at:
+- https://www.noisetexturegenerator.com/
+- Or use any noise/grain texture image
+
+The grain effect is referenced in app/globals.css and adds a subtle film-like texture overlay.
