@@ -29,7 +29,7 @@ export function CustomCursor() {
     <>
       <motion.div
         ref={cursorRef}
-        className="fixed top-0 left-0 w-4 h-4 pointer-events-none z-[9999] blend-difference"
+        className="fixed top-0 left-0 w-20 h-20 pointer-events-none z-[9999] mix-blend-difference"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -37,11 +37,11 @@ export function CustomCursor() {
           translateY: "-50%",
         }}
       >
-        <div className="w-full h-full rounded-full bg-white opacity-90" />
+        <div className="w-full h-full rounded-full bg-white" />
       </motion.div>
 
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9998] blend-difference"
+        className="fixed top-0 left-0 w-32 h-32 pointer-events-none z-[9998] mix-blend-difference"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -49,7 +49,7 @@ export function CustomCursor() {
           translateY: "-50%",
         }}
       >
-        <div className="w-full h-full rounded-full border border-white opacity-30" />
+        <div className="w-full h-full rounded-full border-2 border-white opacity-40" />
       </motion.div>
     </>
   );

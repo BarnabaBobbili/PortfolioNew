@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { DecodeText } from "./DecodeText";
 import { MagneticButton } from "../ui/MagneticButton";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -104,34 +103,18 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center px-8"
+      className="relative min-h-screen flex items-center justify-center px-4"
       style={{ perspective: "1000px" }}
     >
-      <div className="max-w-7xl mx-auto text-center">
+      <div className="w-full text-center">
         {/* Main Title with Decode Effect */}
         <div
           ref={titleContainerRef}
           className="mb-8"
           style={{ transformStyle: "preserve-3d" }}
         >
-          <h1 className="text-7xl md:text-9xl lg:text-[12rem] font-serif font-bold leading-none">
-            <div className="mb-4">
-              <DecodeText
-                text="BARNABA"
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-100 to-blue-100"
-                delay={500}
-                speed={40}
-              />
-            </div>
-            <div>
-              <DecodeText
-                text="BOBBILI"
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-gray-100 to-white"
-                delay={800}
-                speed={40}
-              />
-            </div>
-          </h1>
+          {/* 3D Glowing Name with Decode Effect - rendered in SceneCanvas */}
+          <div className="h-[40vh] md:h-[50vh]" />
 
           {/* Glitch overlay effect */}
           <motion.div

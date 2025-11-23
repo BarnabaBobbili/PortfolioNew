@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -39,6 +39,7 @@ const publications = [
 
 export function Publications() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -67,10 +68,10 @@ export function Publications() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen px-8 py-24"
+      className="relative min-h-screen py-24"
       id="publications"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-8">
         <motion.h2
           className="text-6xl md:text-8xl font-serif font-bold mb-24 text-gradient"
           initial={{ opacity: 0, x: -100 }}
@@ -80,13 +81,23 @@ export function Publications() {
         >
           Publications
         </motion.h2>
+      </div>
 
-        <div className="space-y-2">
-          {publications.map((pub) => (
-            <div
-              key={pub.id}
-              className="publication-item border-b border-white/10 py-8 hover:bg-white/5 transition-colors"
-            >
+      <div className="space-y-0">
+        {publications.map((pub) => (
+          <div
+            key={pub.id}
+            className={`publication-item border-b border-white/10 py-8 transition-all duration-300 ${
+              hoveredId === null
+                ? ""
+                : hoveredId === pub.id
+                ? "bg-white/10"
+                : "opacity-30"
+            }`}
+            onMouseEnter={() => setHoveredId(pub.id)}
+            onMouseLeave={() => setHoveredId(null)}
+          >
+            <div className="max-w-7xl mx-auto px-8">
               <div className="grid md:grid-cols-12 gap-8 items-center">
                 <div className="md:col-span-1">
                   <span className="font-mono text-blue-400 text-sm">
@@ -139,8 +150,8 @@ export function Publications() {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );
