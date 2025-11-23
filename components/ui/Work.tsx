@@ -16,6 +16,8 @@ const projects = [
     year: "2024",
     tags: ["WebGL", "Next.js", "Three.js"],
     preview: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800",
+    github: "https://github.com/yourusername/ethereal-commerce",
+    live: "https://ethereal-commerce.demo.com",
   },
   {
     id: 2,
@@ -24,6 +26,8 @@ const projects = [
     year: "2024",
     tags: ["R3F", "GLSL", "Framer Motion"],
     preview: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800",
+    github: "https://github.com/yourusername/quantum-portfolio",
+    live: "https://quantum-portfolio.demo.com",
   },
   {
     id: 3,
@@ -32,6 +36,8 @@ const projects = [
     year: "2023",
     tags: ["WebGL", "TensorFlow.js", "React"],
     preview: "https://images.unsplash.com/photo-1635322966219-b75ed372eb01?w=800",
+    github: "https://github.com/yourusername/neural-gallery",
+    live: "https://neural-gallery.demo.com",
   },
   {
     id: 4,
@@ -40,6 +46,8 @@ const projects = [
     year: "2023",
     tags: ["GSAP", "Next.js", "TypeScript"],
     preview: "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=800",
+    github: "https://github.com/yourusername/void-interface",
+    live: "https://void-interface.demo.com",
   },
 ];
 
@@ -79,6 +87,7 @@ export function Work() {
       <section
         ref={sectionRef}
         className="relative min-h-screen px-8 py-24"
+        id="work"
       >
         <div className="max-w-7xl mx-auto">
           <motion.h2
@@ -95,7 +104,7 @@ export function Work() {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="project-item border-b border-white/10 py-8 hover:bg-white/5 transition-colors cursor-pointer"
+                className="project-item border-b border-white/10 py-8 hover:bg-white/5 transition-colors"
                 onMouseEnter={() => setHoveredProject(project.id)}
                 onMouseLeave={() => setHoveredProject(null)}
               >
@@ -106,16 +115,62 @@ export function Work() {
                     </span>
                   </div>
 
-                  <div className="md:col-span-6">
+                  <div className="md:col-span-5">
                     <h3 className="text-4xl md:text-6xl font-serif font-bold mb-2 text-white">
                       {project.title}
                     </h3>
-                    <p className="text-gray-400 text-lg">
+                    <p className="text-gray-400 text-lg mb-4">
                       {project.description}
                     </p>
+
+                    {/* GitHub and Live Links */}
+                    <div className="flex gap-4">
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-white/20 rounded-full hover:border-blue-400/50 hover:bg-white/5 transition-all font-mono text-sm"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        GitHub
+                      </a>
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-400/50 text-blue-300 rounded-full hover:bg-blue-500/30 transition-all font-mono text-sm"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                          />
+                        </svg>
+                        Live Demo
+                      </a>
+                    </div>
                   </div>
 
-                  <div className="md:col-span-5">
+                  <div className="md:col-span-6">
                     <div className="flex gap-3 flex-wrap">
                       {project.tags.map((tag) => (
                         <span

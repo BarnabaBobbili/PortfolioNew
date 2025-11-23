@@ -4,79 +4,92 @@ import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
+const PARTICLE_COUNT = 100;
+const FLEE_DISTANCE = 2.5;
+const FLEE_STRENGTH = 0.3;
+const RETURN_SPEED = 0.02;
+
 export function ReactiveParticles() {
   const pointsRef = useRef<THREE.Points>(null);
-  const { pointer } = useThree();
-  const mousePos = useRef(new THREE.Vector3());
+  const { pointer, viewport } = useThree();
 
-  const particleCount = 2000;
+  const { positions, originalPositions, velocities } = useMemo(() => {
+    const positions = new Float32Array(PARTICLE_COUNT * 3);
+    const originalPositions = new Float32Array(PARTICLE_COUNT * 3);
+    const velocities = new Float32Array(PARTICLE_COUNT * 3);
 
-  const [positions, velocities] = useMemo(() => {
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 3);
-
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
       const i3 = i * 3;
+      const x = (Math.random() - 0.5) * 10;
+      const y = (Math.random() - 0.5) * 10;
+      const z = (Math.random() - 0.5) * 5 - 2;
 
-      // Distribute particles in a volume
-      positions[i3] = (Math.random() - 0.5) * 20;
-      positions[i3 + 1] = (Math.random() - 0.5) * 20;
-      positions[i3 + 2] = (Math.random() - 0.5) * 10;
+      positions[i3] = x;
+      positions[i3 + 1] = y;
+      positions[i3 + 2] = z;
 
-      // Random drift velocities
-      velocities[i3] = (Math.random() - 0.5) * 0.002;
-      velocities[i3 + 1] = (Math.random() - 0.5) * 0.002;
-      velocities[i3 + 2] = (Math.random() - 0.5) * 0.001;
+      originalPositions[i3] = x;
+      originalPositions[i3 + 1] = y;
+      originalPositions[i3 + 2] = z;
+
+      velocities[i3] = 0;
+      velocities[i3 + 1] = 0;
+      velocities[i3 + 2] = 0;
     }
 
-    return [positions, velocities];
+    return { positions, originalPositions, velocities };
   }, []);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!pointsRef.current) return;
 
-    const positions = pointsRef.current.geometry.attributes.position
-      .array as Float32Array;
+    const positionAttribute = pointsRef.current.geometry.attributes.position;
+    const positions = positionAttribute.array as Float32Array;
 
-    // Update mouse position in 3D space
-    mousePos.current.set(pointer.x * 10, pointer.y * 10, 0);
+    // Convert pointer to world space
+    const mouseX = pointer.x * viewport.width / 2;
+    const mouseY = pointer.y * viewport.height / 2;
 
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
       const i3 = i * 3;
 
-      // Drift animation
+      const x = positions[i3];
+      const y = positions[i3 + 1];
+      const z = positions[i3 + 2];
+
+      // Calculate distance from mouse (only in 2D for now)
+      const dx = mouseX - x;
+      const dy = mouseY - y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Apply flee force if too close
+      if (distance < FLEE_DISTANCE && distance > 0) {
+        const force = (FLEE_DISTANCE - distance) / FLEE_DISTANCE;
+        velocities[i3] -= (dx / distance) * force * FLEE_STRENGTH;
+        velocities[i3 + 1] -= (dy / distance) * force * FLEE_STRENGTH;
+      }
+
+      // Return to original position
+      const returnX = (originalPositions[i3] - x) * RETURN_SPEED;
+      const returnY = (originalPositions[i3 + 1] - y) * RETURN_SPEED;
+      const returnZ = (originalPositions[i3 + 2] - z) * RETURN_SPEED;
+
+      velocities[i3] += returnX;
+      velocities[i3 + 1] += returnY;
+      velocities[i3 + 2] += returnZ;
+
+      // Apply friction
+      velocities[i3] *= 0.95;
+      velocities[i3 + 1] *= 0.95;
+      velocities[i3 + 2] *= 0.95;
+
+      // Update positions
       positions[i3] += velocities[i3];
       positions[i3 + 1] += velocities[i3 + 1];
       positions[i3 + 2] += velocities[i3 + 2];
-
-      // Create particle position vector
-      const particlePos = new THREE.Vector3(
-        positions[i3],
-        positions[i3 + 1],
-        positions[i3 + 2]
-      );
-
-      // Mouse repulsion
-      const distance = particlePos.distanceTo(mousePos.current);
-      if (distance < 3) {
-        const force = (3 - distance) / 3;
-        const direction = particlePos.clone().sub(mousePos.current).normalize();
-
-        positions[i3] += direction.x * force * 0.05;
-        positions[i3 + 1] += direction.y * force * 0.05;
-        positions[i3 + 2] += direction.z * force * 0.03;
-      }
-
-      // Boundary wrap
-      if (Math.abs(positions[i3]) > 10) positions[i3] *= -1;
-      if (Math.abs(positions[i3 + 1]) > 10) positions[i3 + 1] *= -1;
-      if (Math.abs(positions[i3 + 2]) > 5) positions[i3 + 2] *= -1;
     }
 
-    pointsRef.current.geometry.attributes.position.needsUpdate = true;
-
-    // Gentle rotation
-    pointsRef.current.rotation.y += 0.0002;
+    positionAttribute.needsUpdate = true;
   });
 
   return (
@@ -84,19 +97,18 @@ export function ReactiveParticles() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={particleCount}
+          count={PARTICLE_COUNT}
           array={positions}
           itemSize={3}
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.02}
-        color="#88ccff"
+        size={0.05}
+        color="#4488ff"
         transparent
         opacity={0.6}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
-        depthWrite={false}
       />
     </points>
   );

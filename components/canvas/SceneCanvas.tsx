@@ -1,16 +1,44 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { VoidBackground } from "@/components/hero/VoidBackground";
 import { LiquidArtifact } from "@/components/hero/LiquidArtifact";
+import { ReactiveParticles } from "@/components/hero/ReactiveParticles";
 import { EffectComposer, Bloom, ChromaticAberration, Noise } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function SceneCanvas() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Scroll-based canvas effects
+      gsap.to(containerRef.current, {
+        opacity: 0.3,
+        scale: 1.2,
+        filter: "blur(10px)",
+        scrollTrigger: {
+          trigger: document.body,
+          start: "top top",
+          end: "+=1000",
+          scrub: 1.5,
+        },
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="fixed inset-0 -z-10">
+    <div ref={containerRef} className="fixed inset-0 -z-10">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
         gl={{
@@ -22,6 +50,7 @@ export function SceneCanvas() {
         <Suspense fallback={null}>
           <VoidBackground />
           <LiquidArtifact />
+          <ReactiveParticles />
 
           <EffectComposer>
             <Bloom
