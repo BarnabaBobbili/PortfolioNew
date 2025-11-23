@@ -1,14 +1,32 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-void: #0a0a0f;
+  --color-void-light: #121218;
+
+  --font-family-serif: var(--font-playfair), serif;
+  --font-family-mono: var(--font-geist-mono), monospace;
+
+  --animate-grain: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
   body {
-    @apply bg-void text-white;
+    background-color: var(--color-void);
+    color: white;
     overflow-x: hidden;
   }
 
