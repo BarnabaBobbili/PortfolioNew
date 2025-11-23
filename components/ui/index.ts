@@ -1,0 +1,9 @@
+export { About } from "./About";
+export { Work } from "./Work";
+export { Contact } from "./Contact";
+export { CustomCursor } from "./CustomCursor";
+export { MagneticButton } from "./MagneticButton";
+export { PortalCursor } from "./PortalCursor";
+export { InfiniteMarquee } from "./InfiniteMarquee";
+export { Publications } from "./Publications";
+export { Education } from "./Education";

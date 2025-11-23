@@ -2,39 +2,49 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
+// @ts-ignore
+import liquidVertex from "@/shaders/liquid.vert";
+// @ts-ignore
+import liquidFragment from "@/shaders/liquid.frag";
 
 export function LiquidArtifact() {
   const meshRef = useRef<THREE.Mesh>(null);
   const { pointer } = useThree();
-  const targetRotation = useRef(new THREE.Euler(0, 0, 0));
 
-  // Create optimized icosphere geometry
-  const geometry = useMemo(() => {
-    const geo = new THREE.IcosahedronGeometry(1.2, 32);
-    return geo;
-  }, []);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uFrequency: { value: 1.5 },
+      uAmplitude: { value: 0.3 },
+      uColor: { value: new THREE.Color(0.2, 0.4, 0.8) },
+      uRefractionStrength: { value: 0.1 },
+      uTexture: { value: null },
+    }),
+    []
+  );
 
   useFrame((state) => {
     if (meshRef.current) {
-      // Smooth rotation following mouse
-      targetRotation.current.y = pointer.x * 0.5;
-      targetRotation.current.x = pointer.y * 0.3;
+      const material = meshRef.current.material as THREE.ShaderMaterial;
+      material.uniforms.uTime.value = state.clock.elapsedTime;
+
+      // Smooth rotation following mouse - enhanced responsiveness
+      const targetX = pointer.y * 0.5;
+      const targetY = pointer.x * 0.5;
 
       meshRef.current.rotation.x = THREE.MathUtils.lerp(
         meshRef.current.rotation.x,
-        targetRotation.current.x,
-        0.05
+        targetX,
+        0.1
       );
-
       meshRef.current.rotation.y = THREE.MathUtils.lerp(
         meshRef.current.rotation.y,
-        targetRotation.current.y,
-        0.05
+        targetY,
+        0.1
       );
 
-      // Slow automatic rotation
+      // Add subtle automatic rotation
       meshRef.current.rotation.z += 0.001;
 
       // Subtle floating animation
@@ -43,50 +53,15 @@ export function LiquidArtifact() {
   });
 
   return (
-    <group>
-      {/* Main transmission material artifact */}
-      <mesh ref={meshRef} geometry={geometry}>
-        <MeshTransmissionMaterial
-          backside
-          samples={4}
-          resolution={256}
-          transmission={0.95}
-          roughness={0.2}
-          thickness={1.2}
-          ior={1.45}
-          chromaticAberration={0.3}
-          anisotropy={0.3}
-          distortion={0.2}
-          distortionScale={0.3}
-          temporalDistortion={0.05}
-          clearcoat={1}
-          attenuationDistance={0.5}
-          attenuationColor="#88ccff"
-          color="#ffffff"
-        />
-      </mesh>
-
-      {/* Inner glow sphere */}
-      <mesh scale={0.8}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshBasicMaterial
-          color="#4488ff"
-          transparent
-          opacity={0.1}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-
-      {/* Outer energy ring */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} scale={1.5}>
-        <torusGeometry args={[1, 0.02, 16, 100]} />
-        <meshBasicMaterial
-          color="#88ccff"
-          transparent
-          opacity={0.3}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-    </group>
+    <mesh ref={meshRef} position={[0, 0, 0]}>
+      <icosahedronGeometry args={[1, 64]} />
+      <shaderMaterial
+        uniforms={uniforms}
+        vertexShader={liquidVertex}
+        fragmentShader={liquidFragment}
+        transparent={true}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
   );
 }
