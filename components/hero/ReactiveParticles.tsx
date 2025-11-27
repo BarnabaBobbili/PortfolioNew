@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -43,6 +43,28 @@ export function ReactiveParticles({ direction = 'towards' }: ReactiveParticlesPr
 
   // Smoothed mouse position for fluid movement
   const smoothMouseRef = useRef({ x: 0, y: 0 });
+
+  // Create circular texture for particles
+  const circleTexture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d')!;
+
+    // Draw a circular gradient
+    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
+    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.3)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 64, 64);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
+    return texture;
+  }, []);
 
   // Animation loop - runs every frame
   useFrame((state, delta) => {
@@ -152,6 +174,8 @@ export function ReactiveParticles({ direction = 'towards' }: ReactiveParticlesPr
         opacity={0.8}
         sizeAttenuation // Particles get smaller with distance
         blending={THREE.AdditiveBlending} // Additive blending for glow effect
+        map={circleTexture} // Apply circular texture to make particles round
+        alphaTest={0.01} // Discard pixels with low alpha for clean edges
       />
     </points>
   );

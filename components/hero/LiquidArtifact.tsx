@@ -36,7 +36,7 @@ export function LiquidArtifact() {
       uTime: { value: 0 }, // Animation timer
       uFrequency: { value: 1.5 }, // Wave frequency (higher = more waves)
       uAmplitude: { value: 0.3 }, // Wave strength (higher = bigger distortions)
-      uColor: { value: new THREE.Color(0.4, 0.6, 1.0) }, // Brighter light blue color (was 0.2, 0.4, 0.8)
+      uColor: { value: new THREE.Color(0.1, 0.3, 0.6) }, // Deep blue color - no white
       uRefractionStrength: { value: 0.1 }, // Light refraction amount
       uTexture: { value: null }, // Optional texture (currently unused)
     }),

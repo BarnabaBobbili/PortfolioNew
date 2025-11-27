@@ -64,7 +64,7 @@ export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
         },
       });
 
-      // Initial subtitle entrance
+      // Initial subtitle entrance - Delayed after loading screen
       gsap.fromTo(
         subtitleRef.current,
         {
@@ -77,12 +77,12 @@ export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
           y: 0,
           filter: "blur(0px)",
           duration: 1.2,
-          delay: 2,
+          delay: 5,
           ease: "power3.out",
         }
       );
 
-      // CTA entrance
+      // CTA entrance - Delayed after loading screen
       gsap.fromTo(
         ctaRef.current,
         {
@@ -93,7 +93,7 @@ export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
           opacity: 1,
           y: 0,
           duration: 1,
-          delay: 2.5,
+          delay: 5.5,
           ease: "power3.out",
         }
       );
@@ -125,13 +125,13 @@ export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
               <DecodeText
                 text="BARNABA"
                 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] font-serif font-bold block mb-2 sm:mb-3 md:mb-4"
-                delay={500}
+                delay={3500}
                 speed={40}
               />
               <DecodeText
                 text="BOBBILI"
                 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-[11rem] font-serif font-bold block"
-                delay={900}
+                delay={3900}
                 speed={40}
               />
             </div>
@@ -142,7 +142,7 @@ export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
             className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
-            transition={{ duration: 2, delay: 1.5 }}
+            transition={{ duration: 2, delay: 4.5 }}
           >
             <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-500/10 to-transparent blur-xl" />
           </motion.div>

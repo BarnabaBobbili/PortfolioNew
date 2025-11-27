@@ -8,6 +8,16 @@
   --font-family-mono: var(--font-geist-mono), monospace;
 
   --animate-grain: grain 8s steps(10) infinite;
+  --animate-glitch: glitch 0.3s infinite;
+}
+
+/* Theme CSS Variables - Set by ThemeSwitcher */
+:root {
+  --theme-primary: #4A90E2;
+  --theme-secondary: #2a5f8f;
+  --theme-light: #66aaff;
+  --theme-dark: #1a4d7a;
+  --theme-glow: 74, 144, 226;
 }
 
 @keyframes grain {
@@ -23,15 +33,48 @@
   90% { transform: translate(-10%, 10%); }
 }
 
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
 @layer base {
+  /* Force hide default cursor everywhere */
+  * {
+    cursor: none !important;
+  }
+
   html {
     overflow-x: hidden;
+    cursor: none !important;
   }
 
   body {
     background-color: var(--color-void);
     color: white;
     overflow-x: hidden;
+    cursor: none !important;
+  }
+
+  /* Override all cursor types */
+  a, button, [role="button"], input, textarea, select {
+    cursor: none !important;
   }
 
   html.lenis {
@@ -84,4 +127,63 @@
   .blend-difference {
     mix-blend-mode: difference;
   }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0f;
+    border-left: 1px solid rgba(var(--theme-glow), 0.2);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+    border-radius: 0;
+    border: 1px solid var(--theme-primary);
+    position: relative;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--theme-light) 0%, var(--theme-primary) 100%);
+    box-shadow: 0 0 10px rgba(var(--theme-glow), 0.5);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #0a0a0f;
+  }
+
+  /* Firefox scrollbar - Uses theme variables */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--theme-primary) #0a0a0f;
+  }
+
+  /* Theme-aware utility classes */
+  .theme-text {
+    color: var(--theme-primary);
+  }
+
+  .theme-text-light {
+    color: var(--theme-light);
+  }
+
+  .theme-bg {
+    background-color: var(--theme-primary);
+  }
+
+  .theme-border {
+    border-color: var(--theme-primary);
+  }
+
+  .theme-glow {
+    color: var(--theme-primary);
+    text-shadow: 0 0 10px rgba(var(--theme-glow), 0.5);
+  }
+
+  .theme-gradient {
+    background: linear-gradient(to right, var(--theme-secondary), var(--theme-primary), var(--theme-light));
+  }
 }
+

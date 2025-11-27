@@ -3,7 +3,21 @@
 import { useState, useEffect } from "react";
 import { SceneCanvas } from "@/components/canvas/SceneCanvas";
 import { HeroSection } from "@/components/hero";
-import { CustomCursor } from "@/components/ui/CustomCursor";
+import { QuantumCursor } from "@/components/ui/QuantumCursor";
+import { Navbar } from "@/components/ui/Navbar";
+import { Terminal } from "@/components/ui/ArchTerminal";
+import { SystemHUD } from "@/components/ui/SystemHUD";
+import { ScanlineOverlay } from "@/components/ui/ScanlineOverlay";
+import { MatrixRain } from "@/components/ui/MatrixRain";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { LoadingSequence } from "@/components/ui/LoadingSequence";
+import { BinaryMargin } from "@/components/ui/BinaryMargin";
+import { EasterEggs } from "@/components/ui/EasterEggs";
+import { ControlPanel } from "@/components/ui/ControlPanel";
+import { ParticleNetwork } from "@/components/ui/ParticleNetwork";
+import { StaticNoise } from "@/components/ui/StaticNoise";
+import { CyberBorders } from "@/components/ui/CyberBorders";
+import { VignetteEffect } from "@/components/ui/VignetteEffect";
 import { About } from "@/components/ui/About";
 import { Work } from "@/components/ui/Work";
 import { Skills } from "@/components/ui/Skills";
@@ -13,12 +27,27 @@ import { Certifications } from "@/components/ui/Certifications";
 import { Contact } from "@/components/ui/Contact";
 import { InfiniteMarquee } from "@/components/ui/InfiniteMarquee";
 
+import type { ControlPanelSettings } from "@/components/ui/ControlPanel";
+
+type Theme = "blue" | "cyan" | "purple" | "green" | "red";
+
 export default function Home() {
   // Start with default values to avoid hydration mismatch
   const [particleDirection, setParticleDirection] = useState<'towards' | 'away'>('towards');
   const [textMode, setTextMode] = useState<'3d' | 'decode'>('3d');
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  // Current theme (synced with ControlPanel)
+  const [currentTheme, setCurrentTheme] = useState<Theme>("blue");
+
+  // Effects settings from ControlPanel
+  const [effectsSettings, setEffectsSettings] = useState<ControlPanelSettings>({
+    staticNoise: false,
+    particleNetwork: false,
+    matrixRain: false,
+    scanlines: false,
+  });
 
   useEffect(() => {
     // Only run on client after mount to avoid hydration mismatch
@@ -48,7 +77,30 @@ export default function Home() {
 
   return (
     <main className="relative">
-      <CustomCursor />
+      <LoadingSequence />
+      <CyberBorders />
+      <VignetteEffect />
+      <Navbar />
+      <Terminal
+        onThemeChange={setCurrentTheme}
+        onEffectsChange={setEffectsSettings}
+        currentEffects={effectsSettings}
+        currentTheme={currentTheme}
+      />
+      <SystemHUD />
+      <ScanlineOverlay isEnabled={effectsSettings.scanlines} />
+      <MatrixRain isEnabled={effectsSettings.matrixRain} />
+      <BinaryMargin />
+      <ParticleNetwork isEnabled={effectsSettings.particleNetwork} />
+      <StaticNoise isEnabled={effectsSettings.staticNoise} />
+      <EasterEggs />
+      <ControlPanel
+        onSettingsChange={setEffectsSettings}
+        onThemeChange={setCurrentTheme}
+        currentTheme={currentTheme}
+      />
+      <ScrollProgress />
+      <QuantumCursor />
       <SceneCanvas
         particleDirection={particleDirection}
         show3DText={effectiveTextMode === '3d'}

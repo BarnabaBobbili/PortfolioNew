@@ -151,29 +151,31 @@ function Letter3D({
     mesh.position.z = position[2] - 5; // Behind starting position
     material.emissiveIntensity = 0; // No glow
 
-    const delay = index * 0.06; // Stagger animations across letters
+    const staggerDelay = index * 0.06; // Stagger animations across letters
+    const baseDelay = 3.5; // Match DecodeText timing exactly
+    const delay = baseDelay + staggerDelay;
 
-    // Animate in
+    // Animate in - synchronized with decode start
     gsap.to(mesh.scale, {
       x: 1,
       y: 1,
       z: 1,
-      duration: 0.8,
-      delay: delay + 0.3,
+      duration: 0.6,
+      delay: delay,
       ease: "back.out(1.7)",
     });
 
     gsap.to(mesh.rotation, {
       z: 0,
-      duration: 0.6,
-      delay: delay + 0.3,
+      duration: 0.5,
+      delay: delay,
       ease: "power3.out",
     });
 
     gsap.to(mesh.position, {
       z: position[2],
-      duration: 0.8,
-      delay: delay + 0.3,
+      duration: 0.6,
+      delay: delay,
       ease: "power2.out",
     });
 
@@ -181,7 +183,7 @@ function Letter3D({
     gsap.to(material, {
       emissiveIntensity: 4,
       duration: 0.3,
-      delay: delay + 0.6,
+      delay: delay + 0.2,
       ease: "power2.in",
       onComplete: () => {
         gsap.to(material, {
@@ -262,7 +264,7 @@ export function GlowingName3D({
   firstName = "BARNABA",
   lastName = "BOBBILI",
   position = [0, 0.5, 0],
-  decodeDelay = 500,
+  decodeDelay = 3500, // Start after loading screen completes (3000ms + 500ms buffer)
   decodeSpeed = 50,
 }: GlowingName3DProps) {
   const groupRef = useRef<THREE.Group>(null);
@@ -273,6 +275,32 @@ export function GlowingName3D({
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       return Math.min(scrollY / windowHeight, 1);
+    }
+    return 0;
+  });
+
+  // Responsive scaling and positioning based on viewport width
+  const [responsiveScale, setResponsiveScale] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth;
+      if (width < 380) return 0.18; // Extra small mobile
+      if (width < 480) return 0.22; // Small mobile
+      if (width < 640) return 0.28; // Mobile
+      if (width < 768) return 0.38; // Large mobile
+      if (width < 1024) return 0.55; // Tablet
+      if (width < 1280) return 0.75; // Small desktop
+      return 1; // Large desktop
+    }
+    return 1;
+  });
+
+  // Responsive Y position adjustment for better centering on mobile
+  const [responsiveYOffset, setResponsiveYOffset] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth;
+      if (width < 640) return 0.3; // Move up slightly on mobile
+      if (width < 768) return 0.2; // Move up a bit on large mobile
+      return 0; // No offset on larger screens
     }
     return 0;
   });
@@ -295,6 +323,39 @@ export function GlowingName3D({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // === RESPONSIVE SCALING ===
+  // Update scale and position when window resizes
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 380) {
+        setResponsiveScale(0.18); // Extra small mobile
+        setResponsiveYOffset(0.3);
+      } else if (width < 480) {
+        setResponsiveScale(0.22); // Small mobile
+        setResponsiveYOffset(0.3);
+      } else if (width < 640) {
+        setResponsiveScale(0.28); // Mobile
+        setResponsiveYOffset(0.3);
+      } else if (width < 768) {
+        setResponsiveScale(0.38); // Large mobile
+        setResponsiveYOffset(0.2);
+      } else if (width < 1024) {
+        setResponsiveScale(0.55); // Tablet
+        setResponsiveYOffset(0);
+      } else if (width < 1280) {
+        setResponsiveScale(0.75); // Small desktop
+        setResponsiveYOffset(0);
+      } else {
+        setResponsiveScale(1); // Large desktop
+        setResponsiveYOffset(0);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // === SCROLL ANIMATIONS ===
   // Move name away and fade out as user scrolls (matches HeroSection behavior)
   useFrame(() => {
@@ -307,12 +368,14 @@ export function GlowingName3D({
     if (isInHeroSection) {
       // Push into background (3D depth effect)
       groupRef.current.position.z = position[2] - scrollProgress * 8;
-      groupRef.current.position.y = position[1] - scrollProgress * 2;
+      // Apply responsive Y offset for better mobile centering
+      groupRef.current.position.y = position[1] + responsiveYOffset - scrollProgress * 2;
       groupRef.current.rotation.x = -scrollProgress * 0.3;
 
-      // Shrink as it moves away
-      const scale = 1 - scrollProgress * 0.3;
-      groupRef.current.scale.setScalar(Math.max(scale, 0));
+      // Shrink as it moves away, combined with responsive scaling
+      const scrollScale = 1 - scrollProgress * 0.3;
+      const finalScale = Math.max(scrollScale, 0) * responsiveScale;
+      groupRef.current.scale.setScalar(finalScale);
     }
   });
 
