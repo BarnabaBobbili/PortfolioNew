@@ -45,7 +45,7 @@ void main() {
 
   // Combine effects
   vec3 color = vec3(0.05, 0.05, 0.1);
-  color += vec3(stars);
+  color += vec3(0.4, 0.7, 1.0) * stars; // Light blue stars instead of white
   color += vec3(0.1, 0.15, 0.3) * nebula * 0.3;
 
   // Add subtle gradient

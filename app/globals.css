@@ -24,6 +24,10 @@
 }
 
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     background-color: var(--color-void);
     color: white;

@@ -19,9 +19,9 @@ void main() {
   vec3 color = uColor;
   color += vec3(0.2, 0.4, 0.6) * fresnel;
 
-  // Add metallic highlights
+  // Add light blue highlights instead of white
   float specular = pow(max(dot(vNormal, viewDirection), 0.0), 32.0);
-  color += vec3(1.0) * specular * 0.8;
+  color += vec3(0.4, 0.7, 1.0) * specular * 0.8; // Light blue highlights
 
   // Glass-like transparency
   float alpha = mix(0.3, 0.9, fresnel);

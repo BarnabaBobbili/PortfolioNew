@@ -6,7 +6,25 @@ import { Text } from "@react-three/drei";
 import * as THREE from "three";
 import gsap from "gsap";
 
-// Cyberpunk color palette for each letter
+/**
+ * GlowingName3D Component
+ *
+ * Displays your name in 3D with a cyberpunk "decode" effect where letters
+ * scramble through random characters before settling into the final text.
+ *
+ * FEATURES:
+ * - Decode/glitch text animation (Matrix-style)
+ * - Each letter has a unique neon color
+ * - GSAP entrance animations (scale, rotation, position, glow)
+ * - Continuous floating motion for each letter
+ * - Scroll-reactive (fades and moves away as you scroll)
+ * - Emissive glow with subtle flicker effect
+ *
+ * LAYOUT: Two rows - first name (bigger), last name (smaller)
+ * POSITION: Center of hero section, synced with HeroSection scroll animations
+ */
+
+// Cyberpunk color palette - each letter gets a color from this array
 const NEON_COLORS = [
   "#00FFFF", // Electric Cyan
   "#FF00FF", // Plasma Magenta
@@ -20,23 +38,31 @@ const NEON_COLORS = [
   "#FF5F1F", // Neon Orange
 ];
 
-// Decode effect characters
-const GLITCH_CHARS = "!<>-_\\/[]{}—=+*^?#@$%&";
-const TECH_CHARS = "01アイウエオカキクケコサシスセソタチツテト";
+// Character sets for decode effect - randomly cycles through these
+const GLITCH_CHARS = "!<>-_\\/[]{}—=+*^?#@$%&"; // Symbols
+const TECH_CHARS = "01アイウエオカキクケコサシスセソタチツテト"; // Binary + Japanese katakana
 
+// Get random character for scramble effect
 function getRandomChar(): string {
   const chars = Math.random() > 0.5 ? GLITCH_CHARS : TECH_CHARS;
   return chars[Math.floor(Math.random() * chars.length)];
 }
 
+/**
+ * Letter3D Component (internal)
+ *
+ * Individual 3D letter with decode animation, entrance effects, and floating motion.
+ * Each letter independently animates and has unique randomized properties.
+ */
+
 interface Letter3DProps {
-  targetChar: string;
-  position: [number, number, number];
-  color: string;
-  index: number;
+  targetChar: string; // The final character to display
+  position: [number, number, number]; // 3D position
+  color: string; // Neon color for this letter
+  index: number; // Position in full name (for staggered animations)
   totalLetters: number;
-  decodeDelay: number;
-  decodeSpeed: number;
+  decodeDelay: number; // Delay before decode starts
+  decodeSpeed: number; // Speed of character scrambling (ms per frame)
   fontSize: number;
 }
 
@@ -51,31 +77,33 @@ function Letter3D({
 }: Letter3DProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const [displayChar, setDisplayChar] = useState(getRandomChar());
-  const [isDecoded, setIsDecoded] = useState(false);
+  const [displayChar, setDisplayChar] = useState(getRandomChar()); // Start with random char
+  const [isDecoded, setIsDecoded] = useState(false); // Track if decode is complete
 
-  // Random values for unique animation per letter
+  // Random values for unique animation per letter - ensures each letter moves differently
   const randomOffset = useMemo(() => ({
-    phase: Math.random() * Math.PI * 2,
-    speedX: 0.3 + Math.random() * 0.2,
+    phase: Math.random() * Math.PI * 2, // Random starting phase for sine waves
+    speedX: 0.3 + Math.random() * 0.2, // Floating speed variations
     speedY: 0.4 + Math.random() * 0.3,
     speedZ: 0.2 + Math.random() * 0.2,
-    amplitudeX: 0.02 + Math.random() * 0.02,
+    amplitudeX: 0.02 + Math.random() * 0.02, // Movement range
     amplitudeY: 0.03 + Math.random() * 0.02,
     amplitudeZ: 0.01 + Math.random() * 0.01,
-    flickerSpeed: 5 + Math.random() * 10,
+    flickerSpeed: 5 + Math.random() * 10, // Glow flicker rate
   }), []);
 
-  // Initial animation state
+  // Initial animation state (letters start hidden, then animate in)
   const initialState = useRef({
-    scale: 0,
-    rotationZ: (Math.random() - 0.5) * Math.PI * 2,
-    positionZ: -5,
-    emissiveIntensity: 0,
+    scale: 0, // Start invisible
+    rotationZ: (Math.random() - 0.5) * Math.PI * 2, // Random spin
+    positionZ: -5, // Start further back
+    emissiveIntensity: 0, // No glow initially
   });
 
-  // Decode effect - scramble then resolve
+  // === DECODE EFFECT ===
+  // Scrambles through random characters before revealing the final letter
   useEffect(() => {
+    // Spaces don't need decoding
     if (targetChar === " ") {
       setDisplayChar(" ");
       setIsDecoded(true);
@@ -83,45 +111,47 @@ function Letter3D({
     }
 
     let frameCount = 0;
-    const totalFrames = 15 + Math.random() * 10; // Random number of scrambles
+    const totalFrames = 15 + Math.random() * 10; // Random duration (15-25 frames)
 
+    // Stagger start time based on letter index for wave effect
     const startDelay = setTimeout(() => {
       const interval = setInterval(() => {
         frameCount++;
 
-        // Randomly show target char or glitch char
+        // Gradually increase chance of showing correct letter as we near the end
         if (frameCount > totalFrames * 0.7 && Math.random() < 0.3) {
-          setDisplayChar(targetChar);
+          setDisplayChar(targetChar); // Tease the final character
         } else if (frameCount < totalFrames) {
-          setDisplayChar(getRandomChar());
+          setDisplayChar(getRandomChar()); // Still scrambling
         } else {
-          // Final state - show target char
+          // Decode complete - lock in final character
           setDisplayChar(targetChar);
           setIsDecoded(true);
           clearInterval(interval);
         }
-      }, decodeSpeed);
+      }, decodeSpeed); // Execute every decodeSpeed milliseconds
 
       return () => clearInterval(interval);
-    }, decodeDelay + index * 80);
+    }, decodeDelay + index * 80); // Each letter starts 80ms after the previous one
 
     return () => clearTimeout(startDelay);
   }, [targetChar, index, decodeDelay, decodeSpeed]);
 
-  // GSAP entrance animation
+  // === GSAP ENTRANCE ANIMATION ===
+  // Letters scale in, rotate, fly forward, and glow up on mount
   useEffect(() => {
     if (!meshRef.current || !materialRef.current) return;
 
     const mesh = meshRef.current;
     const material = materialRef.current;
 
-    // Set initial state
-    mesh.scale.setScalar(0);
-    mesh.rotation.z = initialState.current.rotationZ;
-    mesh.position.z = position[2] - 5;
-    material.emissiveIntensity = 0;
+    // Set initial hidden state
+    mesh.scale.setScalar(0); // Invisible
+    mesh.rotation.z = initialState.current.rotationZ; // Random rotation
+    mesh.position.z = position[2] - 5; // Behind starting position
+    material.emissiveIntensity = 0; // No glow
 
-    const delay = index * 0.06;
+    const delay = index * 0.06; // Stagger animations across letters
 
     // Animate in
     gsap.to(mesh.scale, {
@@ -163,26 +193,27 @@ function Letter3D({
     });
   }, [index, position]);
 
-  // Continuous floating animation and flicker
+  // === CONTINUOUS FLOATING ANIMATION ===
+  // Runs every frame to create organic movement
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
 
     const time = state.clock.elapsedTime;
     const { phase, speedX, speedY, amplitudeX, amplitudeY, flickerSpeed } = randomOffset;
 
-    // Subtle floating motion
+    // Floating motion using sine waves (each letter floats uniquely)
     meshRef.current.position.x = position[0] + Math.sin(time * speedX + phase) * amplitudeX;
     meshRef.current.position.y = position[1] + Math.cos(time * speedY + phase) * amplitudeY;
 
-    // Subtle rotation wobble
+    // Gentle rotation wobble for organic feel
     meshRef.current.rotation.x = Math.sin(time * 0.5 + phase) * 0.02;
     meshRef.current.rotation.y = Math.cos(time * 0.4 + phase) * 0.02;
 
-    // Enhanced flicker during decode, subtle after
+    // Glow flicker effect (more intense during decode, subtle after)
     const flickerIntensity = isDecoded ? 0.1 : 0.3;
     const flicker = 1 + Math.sin(time * flickerSpeed) * flickerIntensity + Math.random() * 0.05;
     if (materialRef.current.emissiveIntensity > 0.5) {
-      materialRef.current.emissiveIntensity = 2.5 * flicker;
+      materialRef.current.emissiveIntensity = 2.5 * flicker; // Pulse the glow
     }
   });
 
@@ -212,12 +243,19 @@ function Letter3D({
   );
 }
 
+/**
+ * Main GlowingName3D Export Component
+ *
+ * Orchestrates all letters and handles scroll-based animations.
+ * This is the component you add to SceneCanvas.
+ */
+
 interface GlowingName3DProps {
-  firstName?: string;
-  lastName?: string;
-  position?: [number, number, number];
-  decodeDelay?: number;
-  decodeSpeed?: number;
+  firstName?: string; // Default: "BARNABA"
+  lastName?: string; // Default: "BOBBILI"
+  position?: [number, number, number]; // 3D position
+  decodeDelay?: number; // Delay before decode starts (ms)
+  decodeSpeed?: number; // Speed of character cycling (ms per frame)
 }
 
 export function GlowingName3D({
@@ -228,9 +266,19 @@ export function GlowingName3D({
   decodeSpeed = 50,
 }: GlowingName3DProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Track scroll to animate name with hero section
+  // Initialize scroll progress based on current position (handles page refresh on other sections)
+  const [scrollProgress, setScrollProgress] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      return Math.min(scrollY / windowHeight, 1);
+    }
+    return 0;
+  });
+
+  // === SCROLL TRACKING ===
+  // Monitor scroll position to sync with HeroSection animations
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -240,25 +288,32 @@ export function GlowingName3D({
       setScrollProgress(progress);
     };
 
+    // Set initial scroll position on mount
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Animate group based on scroll
+  // === SCROLL ANIMATIONS ===
+  // Move name away and fade out as user scrolls (matches HeroSection behavior)
   useFrame(() => {
     if (!groupRef.current) return;
 
-    // Push the name into the background as user scrolls (matching hero content behavior)
-    groupRef.current.position.z = position[2] - scrollProgress * 8;
-    groupRef.current.position.y = position[1] - scrollProgress * 2;
-    groupRef.current.rotation.x = -scrollProgress * 0.3;
+    // Only show name when in hero section (scrollProgress between 0 and 1)
+    const isInHeroSection = scrollProgress < 1;
+    groupRef.current.visible = isInHeroSection;
 
-    // Scale down slightly
-    const scale = 1 - scrollProgress * 0.3;
-    groupRef.current.scale.setScalar(Math.max(scale, 0));
+    if (isInHeroSection) {
+      // Push into background (3D depth effect)
+      groupRef.current.position.z = position[2] - scrollProgress * 8;
+      groupRef.current.position.y = position[1] - scrollProgress * 2;
+      groupRef.current.rotation.x = -scrollProgress * 0.3;
 
-    // Fade out by reducing visibility
-    groupRef.current.visible = scrollProgress < 0.95;
+      // Shrink as it moves away
+      const scale = 1 - scrollProgress * 0.3;
+      groupRef.current.scale.setScalar(Math.max(scale, 0));
+    }
   });
 
   // Calculate letter positions
