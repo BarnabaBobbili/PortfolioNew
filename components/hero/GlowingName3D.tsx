@@ -319,18 +319,19 @@ export function GlowingName3D({
   // Calculate letter positions
   const letters = useMemo(() => {
     const result: { char: string; position: [number, number, number]; color: string; index: number; isSecondRow: boolean; fontSize: number }[] = [];
-    const letterSpacing = 1.5;
-    const rowSpacing = 2.8;
+    const firstNameLetterSpacing = 1.5;
+    const lastNameLetterSpacing = 1.25; // Adjusted for smaller font size
+    const rowSpacing = 2.0;
 
     // First name - bigger font
-    const firstNameWidth = firstName.length * letterSpacing;
-    const firstNameStartX = -firstNameWidth / 2 + letterSpacing / 2;
+    const firstNameWidth = firstName.length * firstNameLetterSpacing;
+    const firstNameStartX = -firstNameWidth / 2 + firstNameLetterSpacing / 2;
 
     firstName.split("").forEach((char, i) => {
       result.push({
         char,
         position: [
-          position[0] + firstNameStartX + i * letterSpacing,
+          position[0] + firstNameStartX + i * firstNameLetterSpacing,
           position[1] + rowSpacing / 2 + 0.3,
           position[2]
         ],
@@ -341,15 +342,15 @@ export function GlowingName3D({
       });
     });
 
-    // Last name - smaller font
-    const lastNameWidth = lastName.length * letterSpacing;
-    const lastNameStartX = -lastNameWidth / 2 + letterSpacing / 2;
+    // Last name - smaller font with adjusted spacing
+    const lastNameWidth = lastName.length * lastNameLetterSpacing;
+    const lastNameStartX = -lastNameWidth / 2 + lastNameLetterSpacing / 2;
 
     lastName.split("").forEach((char, i) => {
       result.push({
         char,
         position: [
-          position[0] + lastNameStartX + i * letterSpacing,
+          position[0] + lastNameStartX + i * lastNameLetterSpacing,
           position[1] - rowSpacing / 2 + 0.3,
           position[2]
         ],

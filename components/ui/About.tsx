@@ -59,23 +59,23 @@ export function About() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center px-8 py-24"
+      className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-24"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto w-full">
         <motion.h2
           ref={titleRef}
-          className="text-6xl md:text-8xl font-serif font-bold mb-16 text-gradient"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold mb-8 sm:mb-12 md:mb-16 text-gradient"
         >
           About
         </motion.h2>
 
-        <div ref={contentRef} className="grid md:grid-cols-2 gap-12">
+        <div ref={contentRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12">
           <div>
-            <p className="text-lg md:text-xl text-gray-100 mb-6 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-gray-100 mb-4 sm:mb-5 md:mb-6 leading-relaxed">
               I'm a creative technologist specializing in immersive web
               experiences that blur the line between art and engineering.
             </p>
-            <p className="text-lg md:text-xl text-gray-100 mb-6 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-gray-100 mb-4 sm:mb-5 md:mb-6 leading-relaxed">
               With expertise in WebGL, Three.js, and modern frontend
               frameworks, I craft digital experiences that captivate and
               inspire.
@@ -83,10 +83,10 @@ export function About() {
           </div>
 
           <div>
-            <h3 className="text-2xl font-mono font-semibold mb-6 text-white">
+            <h3 className="text-xl sm:text-2xl font-mono font-semibold mb-4 sm:mb-5 md:mb-6 text-white">
               Expertise
             </h3>
-            <ul className="space-y-3 font-mono text-gray-200">
+            <ul className="space-y-2 sm:space-y-3 font-mono text-sm sm:text-base text-gray-200">
               {[
                 "WebGL & Three.js",
                 "React & Next.js",
@@ -103,7 +103,7 @@ export function About() {
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <span className="w-2 h-2 bg-white rounded-full" />
+                  <span className="w-2 h-2 bg-white rounded-full flex-shrink-0" />
                   {skill}
                 </motion.li>
               ))}

@@ -1,18 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MagneticButton } from "../ui/MagneticButton";
+import { DecodeText } from "./DecodeText";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function HeroSection() {
+export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleContainerRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const [isResumeHovered, setIsResumeHovered] = useState(false);
 
   useEffect(() => {
     if (
@@ -103,18 +105,37 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center px-4"
+      className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
       style={{ perspective: "1000px" }}
     >
       <div className="w-full text-center">
         {/* Main Title with Decode Effect */}
         <div
           ref={titleContainerRef}
-          className="mb-8"
+          className="mb-4 sm:mb-6 md:mb-8"
           style={{ transformStyle: "preserve-3d" }}
         >
-          {/* 3D Glowing Name with Decode Effect - rendered in SceneCanvas */}
-          <div className="h-[40vh] md:h-[50vh]" />
+          {/* Conditional rendering based on textMode */}
+          {textMode === '3d' ? (
+            // 3D name is rendered in SceneCanvas, just reserve space
+            <div className="h-[35vh] sm:h-[40vh] md:h-[45vh] lg:h-[50vh]" />
+          ) : (
+            // Decode text rendered in DOM
+            <div className="h-[35vh] sm:h-[40vh] md:h-[45vh] lg:h-[50vh] flex flex-col items-center justify-center pt-8 sm:pt-10 md:pt-12">
+              <DecodeText
+                text="BARNABA"
+                className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] font-serif font-bold block mb-2 sm:mb-3 md:mb-4"
+                delay={500}
+                speed={40}
+              />
+              <DecodeText
+                text="BOBBILI"
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-[11rem] font-serif font-bold block"
+                delay={900}
+                speed={40}
+              />
+            </div>
+          )}
 
           {/* Glitch overlay effect */}
           <motion.div
@@ -130,7 +151,7 @@ export function HeroSection() {
         {/* Subtitle */}
         <p
           ref={subtitleRef}
-          className="text-xl md:text-2xl lg:text-3xl font-mono text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-mono text-gray-400 mb-4 sm:mb-5 md:mb-6 mt-8 sm:mt-12 md:mt-16 max-w-xs sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed px-4"
         >
           <span className="text-blue-300">[SYSTEM.INIT]</span> Architecting
           immersive digital experiences at the intersection of{" "}
@@ -140,25 +161,55 @@ export function HeroSection() {
         </p>
 
         {/* CTA Buttons */}
-        <div ref={ctaRef} className="flex gap-6 justify-center items-center">
-          <MagneticButton className="group relative px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-mono font-medium rounded-full border border-white/20 hover:border-blue-400/50 transition-all overflow-hidden">
-            <span className="relative z-10">EXPLORE PROJECTS</span>
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-blue-600/20"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: "100%" }}
-              transition={{ duration: 0.6 }}
-            />
+        <div ref={ctaRef} className="flex gap-3 sm:gap-4 justify-center items-center flex-wrap mb-16 sm:mb-20 px-4">
+          <MagneticButton className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-white text-void font-mono font-medium text-xs sm:text-sm md:text-base rounded-full hover:shadow-2xl hover:shadow-white/20 transition-shadow">
+            <span className="hidden sm:inline">EXPLORE PROJECTS</span>
+            <span className="sm:hidden">PROJECTS</span>
           </MagneticButton>
 
-          <MagneticButton className="px-8 py-4 border border-white/20 text-white font-mono font-medium rounded-full hover:border-white/40 hover:bg-white/5 transition-all">
-            INITIALIZE CONTACT
+          <MagneticButton className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-white text-void font-mono font-medium text-xs sm:text-sm md:text-base rounded-full hover:shadow-2xl hover:shadow-white/20 transition-shadow">
+            <span className="hidden sm:inline">INITIALIZE CONTACT</span>
+            <span className="sm:hidden">CONTACT</span>
+          </MagneticButton>
+
+          <MagneticButton
+            className="px-4 sm:px-5 py-3 sm:py-4 bg-white text-void font-mono font-medium text-xs sm:text-sm md:text-base rounded-full hover:shadow-2xl hover:shadow-white/20 transition-all"
+          >
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+              onMouseEnter={() => setIsResumeHovered(true)}
+              onMouseLeave={() => setIsResumeHovered(false)}
+            >
+              <motion.span
+                initial={{ width: 0, opacity: 0 }}
+                animate={{
+                  width: isResumeHovered ? "auto" : 0,
+                  opacity: isResumeHovered ? 1 : 0
+                }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden whitespace-nowrap hidden sm:inline"
+              >
+                MY RESUME
+              </motion.span>
+              <svg
+                className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" />
+                <path d="M14 2v6h6" fill="none" stroke="white" strokeWidth="2" />
+                <path d="M9 13h6M9 17h6" stroke="white" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </a>
           </MagneticButton>
         </div>
 
         {/* Scroll Indicator */}
         <motion.div
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
+          className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2"
           animate={{
             y: [0, 10, 0],
             opacity: [0.5, 1, 0.5],
@@ -190,10 +241,10 @@ export function HeroSection() {
         </motion.div>
 
         {/* Decorative corner brackets */}
-        <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-blue-300/30" />
-        <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-blue-300/30" />
-        <div className="absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 border-blue-300/30" />
-        <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-blue-300/30" />
+        <div className="hidden sm:block absolute top-4 sm:top-6 md:top-8 left-4 sm:left-6 md:left-8 w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 border-l-2 border-t-2 border-blue-300/30" />
+        <div className="hidden sm:block absolute top-4 sm:top-6 md:top-8 right-4 sm:right-6 md:right-8 w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 border-r-2 border-t-2 border-blue-300/30" />
+        <div className="hidden sm:block absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 border-l-2 border-b-2 border-blue-300/30" />
+        <div className="hidden sm:block absolute bottom-4 sm:bottom-6 md:bottom-8 right-4 sm:right-6 md:right-8 w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 border-r-2 border-b-2 border-blue-300/30" />
       </div>
     </section>
   );

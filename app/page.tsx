@@ -9,6 +9,7 @@ import { Work } from "@/components/ui/Work";
 import { Skills } from "@/components/ui/Skills";
 import { Publications } from "@/components/ui/Publications";
 import { Education } from "@/components/ui/Education";
+import { Certifications } from "@/components/ui/Certifications";
 import { Contact } from "@/components/ui/Contact";
 import { InfiniteMarquee } from "@/components/ui/InfiniteMarquee";
 
@@ -61,6 +62,7 @@ export default function Home() {
         <InfiniteMarquee text="CREATIVE DEVELOPER • RESEARCHER • ENGINEER" baseVelocity={2} />
         <Publications />
         <Education />
+        <Certifications />
         <Contact />
       </div>
     </main>
