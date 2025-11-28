@@ -150,9 +150,11 @@ export function Terminal({
           let dirToList = currentDir === "~" || currentDir === "/home/barnaba" ? "/home/barnaba" : "/home/barnaba/projects";
 
           if (currentDir === "~" || currentDir === "/home/barnaba") {
-            const entries = Object.keys(filesystem["/home/barnaba"]);
+            const homeDir = filesystem["/home/barnaba"];
+            const entries = Object.keys(homeDir);
             outputLines = entries.map(entry => {
-              return typeof filesystem["/home/barnaba"][entry] === "object" ? `${entry}/` : entry;
+              const item = homeDir[entry as keyof typeof homeDir];
+              return typeof item === "object" ? `${entry}/` : entry;
             });
           } else if (currentDir === "~/projects") {
             const projects = filesystem["/home/barnaba"]["projects"];
@@ -193,14 +195,18 @@ export function Terminal({
           // Check in current directory
           if (currentDir === "~" || currentDir === "/home/barnaba") {
             // Check home directory
-            if (fileName in filesystem["/home/barnaba"] && typeof filesystem["/home/barnaba"][fileName] === "string") {
-              fileContent = filesystem["/home/barnaba"][fileName];
+            const homeDir = filesystem["/home/barnaba"];
+            if (fileName in homeDir) {
+              const item = homeDir[fileName as keyof typeof homeDir];
+              if (typeof item === "string") {
+                fileContent = item;
+              }
             }
           } else if (currentDir === "~/projects") {
             // Check projects directory
             const projects = filesystem["/home/barnaba"]["projects"];
             if (fileName in projects) {
-              fileContent = projects[fileName];
+              fileContent = projects[fileName as keyof typeof projects];
             }
           }
 
