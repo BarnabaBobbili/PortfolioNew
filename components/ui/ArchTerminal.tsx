@@ -24,6 +24,24 @@ interface TerminalProps {
   currentTheme?: Theme;
 }
 
+// Simulated filesystem
+const filesystem = {
+  "/home/barnaba": {
+    "about.txt": "M.Tech student at Amrita Vishwa Vidhyapeetam | Full-stack developer passionate about secure systems and web technologies",
+    "skills.txt": "Python, Java, C++, React, Next.js, Node.js, Flask, MongoDB, MySQL, AWS, Azure, Docker, Three.js, WebGL",
+    "contact.txt": "Email: barnababobbili098@gmail.com\nGitHub: github.com/BarnabaBobbili\nPhone: 9384617156\nLocation: Chennai",
+    "education.txt": "M.Tech in Computer Science and Engineering\nAmrita Vishwa Vidhyapeetam, Coimbatore\n2025 - Present\n\nB.E in Computer Science and Engineering (AI & ML)\nSathyabama Institute of Science and Technology, Chennai\n2021 - 2025 | CGPA: 7.47",
+    "publications.txt": "Multi-Modal Security Integration and Role-Based Access Control for Secure File Management System\nIEEE, 2025\nAuthors: Barnaba Bobbili, et al.\nTags: Security, Biometrics, Access Control",
+    "certifications.txt": "1. Oracle Cloud Infrastructure - Certified Foundations Associate (2024)\n2. Data Analysis with Python - IBM (2024)\n3. Java Data Structures and Algorithms - Udemy (2024)",
+    "projects": {
+      "canteen-delight.md": "Full-stack canteen management system - MERN Stack",
+      "personal-blog.md": "Next.js 15 blog with Supabase backend",
+      "sentinel-auth.md": "Zero Trust biometric authentication platform",
+      "secure-file-system.md": "Multi-modal security integration (IEEE Published)"
+    }
+  }
+};
+
 export function Terminal({
   onThemeChange,
   onEffectsChange,
@@ -38,6 +56,12 @@ export function Terminal({
     { type: "output", content: "barnaba-portfolio login: barnaba" },
     { type: "output", content: "Password:" },
     { type: "output", content: "Last login: " + new Date().toLocaleString() },
+    { type: "output", content: "" },
+    { type: "output", content: "Welcome to Barnaba's Portfolio Terminal!" },
+    { type: "output", content: "" },
+    { type: "output", content: "Type 'help' to see available commands" },
+    { type: "output", content: "Type 'ls' to list files" },
+    { type: "output", content: "Type 'cat <filename>' to read files" },
     { type: "output", content: "" },
   ]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -121,7 +145,22 @@ export function Terminal({
 
     switch (command) {
       case "ls":
-        outputLines = ["about.txt", "contact.txt", "skills.txt", "projects/"];
+        {
+          // Determine which directory to list
+          let dirToList = currentDir === "~" || currentDir === "/home/barnaba" ? "/home/barnaba" : "/home/barnaba/projects";
+
+          if (currentDir === "~" || currentDir === "/home/barnaba") {
+            const entries = Object.keys(filesystem["/home/barnaba"]);
+            outputLines = entries.map(entry => {
+              return typeof filesystem["/home/barnaba"][entry] === "object" ? `${entry}/` : entry;
+            });
+          } else if (currentDir === "~/projects") {
+            const projects = filesystem["/home/barnaba"]["projects"];
+            outputLines = Object.keys(projects);
+          } else {
+            outputLines = ["about.txt", "contact.txt", "skills.txt", "projects/"];
+          }
+        }
         break;
 
       case "pwd":
@@ -141,29 +180,37 @@ export function Terminal({
         break;
 
       case "cat":
-        if (!args[0]) {
-          outputLines = ["cat: missing operand"];
-          addOutputLines(outputLines, "error");
-          return;
-        }
-        switch (args[0]) {
-          case "about.txt":
-            outputLines = ["Full-stack developer and researcher passionate about web technologies and innovation."];
-            break;
-          case "skills.txt":
-            outputLines = ["React, TypeScript, Next.js, Three.js, Node.js, Python, Machine Learning, Computer Vision"];
-            break;
-          case "contact.txt":
-            outputLines = [
-              "Email: contact@barnaba.dev",
-              "GitHub: github.com/barnaba",
-              "LinkedIn: linkedin.com/in/barnaba"
-            ];
-            break;
-          default:
-            outputLines = [`cat: ${args[0]}: No such file or directory`];
+        {
+          if (!args[0]) {
+            outputLines = ["cat: missing operand"];
             addOutputLines(outputLines, "error");
             return;
+          }
+
+          const fileName = args[0];
+          let fileContent: string | null = null;
+
+          // Check in current directory
+          if (currentDir === "~" || currentDir === "/home/barnaba") {
+            // Check home directory
+            if (fileName in filesystem["/home/barnaba"] && typeof filesystem["/home/barnaba"][fileName] === "string") {
+              fileContent = filesystem["/home/barnaba"][fileName];
+            }
+          } else if (currentDir === "~/projects") {
+            // Check projects directory
+            const projects = filesystem["/home/barnaba"]["projects"];
+            if (fileName in projects) {
+              fileContent = projects[fileName];
+            }
+          }
+
+          if (fileContent) {
+            outputLines = fileContent.split("\n");
+          } else {
+            outputLines = [`cat: ${fileName}: No such file or directory`];
+            addOutputLines(outputLines, "error");
+            return;
+          }
         }
         break;
 

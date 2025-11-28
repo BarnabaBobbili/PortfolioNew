@@ -10,19 +10,19 @@ gsap.registerPlugin(ScrollTrigger);
 const education = [
   {
     id: 1,
-    degree: "Master of Science in Computer Science",
-    institution: "Stanford University",
-    location: "Stanford, CA",
-    period: "2020 - 2022",
-    tags: ["Computer Graphics", "HCI", "Machine Learning"],
+    degree: "M.Tech in Computer Science and Engineering",
+    institution: "Amrita Vishwa Vidhyapeetam",
+    location: "Coimbatore",
+    period: "2025 - Present",
+    tags: ["Advanced Algorithms", "Cloud Computing", "Research"],
   },
   {
     id: 2,
-    degree: "Bachelor of Science in Computer Science",
-    institution: "MIT",
-    location: "Cambridge, MA",
-    period: "2016 - 2020",
-    tags: ["Software Engineering", "Mathematics", "Algorithms"],
+    degree: "B.E in Computer Science and Engineering (AI & ML)",
+    institution: "Sathyabama Institute of Science and Technology",
+    location: "Chennai",
+    period: "2021 - 2025",
+    tags: ["Artificial Intelligence", "Machine Learning", "CGPA: 7.47"],
   },
 ];
 
@@ -36,18 +36,20 @@ export function Education() {
 
     const items = sectionRef.current.querySelectorAll(".education-item");
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       gsap.fromTo(
         item,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
-          ease: "power3.out",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: index * 0.1,
           scrollTrigger: {
             trigger: item,
-            start: "top 85%",
+            start: "top 90%",
+            end: "top 20%",
             toggleActions: "play none none reverse",
           },
         }
@@ -77,7 +79,7 @@ export function Education() {
         {education.map((edu) => (
           <div
             key={edu.id}
-            className={`education-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-300 ${
+            className={`education-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-500 ease-out ${
               hoveredId === null
                 ? ""
                 : hoveredId === edu.id
@@ -90,7 +92,7 @@ export function Education() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start md:items-center">
                 <div className="md:col-span-1">
-                  <span className="font-mono text-blue-400 text-xs sm:text-sm">
+                  <span className="font-mono text-cyan-400 text-xs sm:text-sm">
                     {edu.period.split(" - ")[1]}
                   </span>
                 </div>
@@ -102,7 +104,7 @@ export function Education() {
                   <p className="text-gray-200 text-sm sm:text-base md:text-lg">
                     {edu.institution} — {edu.location}
                   </p>
-                  <p className="text-blue-300 text-xs sm:text-sm font-mono mt-1">
+                  <p className="text-cyan-300 text-xs sm:text-sm font-mono mt-1">
                     {edu.period}
                   </p>
                 </div>

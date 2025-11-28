@@ -78,31 +78,74 @@ export function ThemeSwitcher() {
       /* Override cyan colors with theme colors */
       .text-cyan-400 { color: ${theme.primary} !important; }
       .text-cyan-300 { color: ${theme.light} !important; }
+      .text-cyan-500 { color: ${theme.primary} !important; }
+      .text-cyan-600 { color: ${theme.secondary} !important; }
+      .text-blue-300 { color: ${theme.light} !important; }
       .text-blue-400 { color: ${theme.primary} !important; }
       .text-blue-500 { color: ${theme.secondary} !important; }
+      .text-blue-600 { color: ${theme.dark} !important; }
+      .text-purple-400 { color: ${theme.primary} !important; }
+      .text-purple-500 { color: ${theme.secondary} !important; }
+      .text-purple-600 { color: ${theme.dark} !important; }
 
       .border-cyan-400, .border-cyan-500 { border-color: ${theme.primary} !important; }
       .border-cyan-500\\/30 { border-color: rgba(${theme.glow}, 0.3) !important; }
       .border-cyan-500\\/20 { border-color: rgba(${theme.glow}, 0.2) !important; }
       .border-cyan-400\\/50 { border-color: rgba(${theme.glow}, 0.5) !important; }
+      .border-blue-400\\/50 { border-color: rgba(${theme.glow}, 0.5) !important; }
+      .border-blue-500 { border-color: ${theme.secondary} !important; }
+      .border-purple-500 { border-color: ${theme.secondary} !important; }
 
       .bg-cyan-400 { background-color: ${theme.primary} !important; }
       .bg-cyan-500 { background-color: ${theme.primary} !important; }
+      .bg-cyan-400\\/30 { background-color: rgba(${theme.glow}, 0.3) !important; }
+      .bg-cyan-500\\/5 { background-color: rgba(${theme.glow}, 0.05) !important; }
+      .bg-cyan-500\\/10 { background-color: rgba(${theme.glow}, 0.1) !important; }
       .bg-cyan-900\\/20 { background-color: rgba(${theme.glow}, 0.2) !important; }
       .bg-cyan-900\\/30 { background-color: rgba(${theme.glow}, 0.3) !important; }
+      .bg-blue-500 { background-color: ${theme.secondary} !important; }
+      .bg-blue-500\\/10 { background-color: rgba(${theme.glow}, 0.1) !important; }
+      .bg-blue-500\\/20 { background-color: rgba(${theme.glow}, 0.2) !important; }
+      .bg-purple-500\\/20 { background-color: rgba(${theme.glow}, 0.2) !important; }
 
-      .from-cyan-400 { --tw-gradient-from: ${theme.primary} !important; }
-      .to-cyan-400 { --tw-gradient-to: ${theme.primary} !important; }
-      .via-cyan-400 { --tw-gradient-via: ${theme.primary} !important; }
-      .from-blue-500 { --tw-gradient-from: ${theme.secondary} !important; }
-      .to-blue-500 { --tw-gradient-to: ${theme.secondary} !important; }
+      .from-cyan-400 { --tw-gradient-from: ${theme.primary} var(--tw-gradient-from-position) !important; }
+      .to-cyan-400 { --tw-gradient-to: ${theme.primary} var(--tw-gradient-to-position) !important; }
+      .via-cyan-400 { --tw-gradient-via: ${theme.primary} var(--tw-gradient-via-position) !important; }
+      .from-cyan-500 { --tw-gradient-from: ${theme.primary} var(--tw-gradient-from-position) !important; }
+      .to-cyan-500 { --tw-gradient-to: ${theme.primary} var(--tw-gradient-to-position) !important; }
+      .via-cyan-500 { --tw-gradient-via: ${theme.primary} var(--tw-gradient-via-position) !important; }
+      .from-cyan-500\\/10 { --tw-gradient-from: rgba(${theme.glow}, 0.1) var(--tw-gradient-from-position) !important; }
+      .to-cyan-500\\/20 { --tw-gradient-to: rgba(${theme.glow}, 0.2) var(--tw-gradient-to-position) !important; }
+      .from-blue-500 { --tw-gradient-from: ${theme.secondary} var(--tw-gradient-from-position) !important; }
+      .to-blue-500 { --tw-gradient-to: ${theme.secondary} var(--tw-gradient-to-position) !important; }
+      .via-blue-500 { --tw-gradient-via: ${theme.secondary} var(--tw-gradient-via-position) !important; }
+      .from-blue-500\\/10 { --tw-gradient-from: rgba(${theme.glow}, 0.1) var(--tw-gradient-from-position) !important; }
+      .from-blue-500\\/20 { --tw-gradient-from: rgba(${theme.glow}, 0.2) var(--tw-gradient-from-position) !important; }
+      .to-purple-600 { --tw-gradient-to: ${theme.dark} var(--tw-gradient-to-position) !important; }
+      .via-purple-600 { --tw-gradient-via: ${theme.dark} var(--tw-gradient-via-position) !important; }
 
       .shadow-cyan-500\\/20 { --tw-shadow-color: rgba(${theme.glow}, 0.2) !important; }
+      .shadow-cyan-500\\/50 { --tw-shadow-color: rgba(${theme.glow}, 0.5) !important; }
 
       /* Hover states */
       .hover\\:text-cyan-400:hover { color: ${theme.primary} !important; }
+      .hover\\:text-cyan-300:hover { color: ${theme.light} !important; }
       .hover\\:bg-cyan-500\\/10:hover { background-color: rgba(${theme.glow}, 0.1) !important; }
+      .hover\\:border-cyan-400:hover { border-color: ${theme.primary} !important; }
       .hover\\:border-cyan-500\\/60:hover { border-color: rgba(${theme.glow}, 0.6) !important; }
+      .hover\\:shadow-cyan-500\\/50:hover { --tw-shadow-color: rgba(${theme.glow}, 0.5) !important; }
+
+      /* Ring and outline colors */
+      .ring-cyan-400 { --tw-ring-color: ${theme.primary} !important; }
+      .ring-cyan-500 { --tw-ring-color: ${theme.primary} !important; }
+
+      /* Decoration and accent colors */
+      .decoration-cyan-400 { text-decoration-color: ${theme.primary} !important; }
+      .accent-cyan-400 { accent-color: ${theme.primary} !important; }
+
+      /* Stroke and fill for SVGs */
+      .stroke-cyan-400 { stroke: ${theme.primary} !important; }
+      .fill-cyan-400 { fill: ${theme.primary} !important; }
     `;
   }, [currentTheme]);
 

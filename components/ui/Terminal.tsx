@@ -28,12 +28,14 @@ interface TerminalProps {
 // Simulated filesystem
 const filesystem = {
   "/home/barnaba": {
-    "about.txt": "Full-stack developer and researcher passionate about web technologies and innovation.",
-    "skills.txt": "React, TypeScript, Next.js, Three.js, Node.js, Python, Machine Learning, Computer Vision",
-    "contact.txt": "Email: contact@barnaba.dev\nGitHub: github.com/barnaba\nLinkedIn: linkedin.com/in/barnaba",
+    "about.txt": "M.Tech student at Amrita Vishwa Vidhyapeetam | Full-stack developer passionate about secure systems and web technologies",
+    "skills.txt": "Python, Java, C++, React, Next.js, Node.js, Flask, MongoDB, MySQL, AWS, Azure, Docker, Three.js, WebGL",
+    "contact.txt": "Email: barnababobbili098@gmail.com\nGitHub: github.com/BarnabaBobbili\nPhone: 9384617156\nLocation: Chennai",
     "projects": {
-      "portfolio.md": "This cyberpunk portfolio showcasing 25+ exclusive features",
-      "research.md": "Publications in AI, Computer Vision, and Web Technologies"
+      "canteen-delight.md": "Full-stack canteen management system - MERN Stack",
+      "personal-blog.md": "Next.js 15 blog with Supabase backend",
+      "sentinel-auth.md": "Zero Trust biometric authentication platform",
+      "secure-file-system.md": "Multi-modal security integration (IEEE Published)"
     }
   }
 };
@@ -148,6 +150,12 @@ export function Terminal({
           { type: "info", content: "" },
           { type: "info", content: "═══════════════════════ AVAILABLE COMMANDS ═══════════════════════" },
           { type: "output", content: "" },
+          { type: "success", content: "FILESYSTEM:" },
+          { type: "output", content: "  ls [path]       - List directory contents" },
+          { type: "output", content: "  cd <path>       - Change directory" },
+          { type: "output", content: "  pwd             - Print working directory" },
+          { type: "output", content: "  cat <file>      - Display file contents" },
+          { type: "output", content: "" },
           { type: "success", content: "NAVIGATION:" },
           { type: "output", content: "  /about          - Navigate to About section" },
           { type: "output", content: "  /work           - Navigate to Work section" },
@@ -191,14 +199,21 @@ export function Terminal({
           { type: "output", content: "─────────────────" },
           { type: "output", content: `OS: Portfolio Linux x86_64` },
           { type: "output", content: `Host: Barnaba Bobbili` },
-          { type: "output", content: `Kernel: Next.js 14.0.0` },
+          { type: "output", content: `Education: M.Tech CSE @ Amrita Vishwa Vidhyapeetam` },
+          { type: "output", content: `Location: Chennai, India` },
+          { type: "output", content: `Kernel: Next.js 16.0.3` },
           { type: "output", content: `Uptime: ${Math.floor(performance.now() / 1000)}s` },
           { type: "output", content: `Shell: arch-terminal 1.0.0` },
           { type: "output", content: `Theme: ${currentTheme}` },
-          { type: "output", content: `Terminal: portfolio-term` },
-          { type: "output", content: `CPU: React 18 @ 60fps` },
+          { type: "output", content: `CPU: React 19 @ 60fps` },
           { type: "output", content: `GPU: Three.js WebGL Renderer` },
           { type: "output", content: `Memory: Optimized` },
+          { type: "output", content: "" },
+          { type: "success", content: "Tech Stack:" },
+          { type: "output", content: `  Languages: Python, Java, C++, JavaScript, TypeScript` },
+          { type: "output", content: `  Frontend:  React, Next.js, Three.js, WebGL` },
+          { type: "output", content: `  Backend:   Node.js, Flask, MongoDB, MySQL` },
+          { type: "output", content: `  Cloud:     AWS, Azure, Docker` },
           { type: "output", content: "" },
           { type: "success", content: "Active Effects:" },
           { type: "output", content: `  Scanlines: ${currentEffects.scanlines ? '✓ ON' : '✗ OFF'}` },
@@ -437,6 +452,173 @@ export function Terminal({
         setTimeout(() => setIsOpen(false), 500);
         break;
 
+      case "pwd":
+        outputLines.push({ type: "output", content: currentDir });
+        break;
+
+      case "ls":
+        {
+          const targetPath = args.length > 0 ? args[0] : ".";
+          let absolutePath: string;
+
+          // Resolve to absolute path
+          if (targetPath === ".") {
+            absolutePath = currentDir;
+          } else if (targetPath === "..") {
+            absolutePath = currentDir.split("/").slice(0, -1).join("/") || "/home/barnaba";
+          } else if (targetPath.startsWith("/")) {
+            absolutePath = targetPath;
+          } else if (targetPath === "~") {
+            absolutePath = "/home/barnaba";
+          } else {
+            absolutePath = `${currentDir}/${targetPath}`;
+          }
+
+          // Normalize path
+          const normalized = absolutePath.replace(/\/+/g, "/").replace(/\/$/, "");
+
+          // Navigate to the path in filesystem
+          let current: any = null;
+
+          if (normalized === "/home/barnaba") {
+            current = filesystem["/home/barnaba"];
+          } else if (normalized.startsWith("/home/barnaba/")) {
+            const relativePath = normalized.substring("/home/barnaba/".length);
+            const parts = relativePath.split("/");
+            current = filesystem["/home/barnaba"];
+
+            for (const part of parts) {
+              if (current && typeof current === "object" && part in current) {
+                current = current[part];
+              } else {
+                current = null;
+                break;
+              }
+            }
+          }
+
+          // Display results
+          if (current && typeof current === "object" && !Array.isArray(current)) {
+            const entries = Object.keys(current);
+            if (entries.length > 0) {
+              outputLines.push({ type: "output", content: "" });
+              entries.forEach(entry => {
+                const isDir = typeof current[entry] === "object";
+                outputLines.push({
+                  type: isDir ? "info" : "output",
+                  content: isDir ? `  ${entry}/` : `  ${entry}`
+                });
+              });
+              outputLines.push({ type: "output", content: "" });
+            } else {
+              outputLines.push({ type: "output", content: "" });
+            }
+          } else {
+            outputLines.push({ type: "error", content: `ls: cannot access '${targetPath}': No such file or directory` });
+          }
+        }
+        break;
+
+      case "cd":
+        {
+          if (args.length === 0) {
+            setCurrentDir("/home/barnaba");
+            outputLines.push({ type: "success", content: "Changed directory to ~" });
+          } else {
+            let target = args[0];
+
+            // Handle special cases
+            if (target === "~" || target === "~/") {
+              setCurrentDir("/home/barnaba");
+              outputLines.push({ type: "success", content: "Changed directory to ~" });
+              break;
+            }
+
+            // Build full path
+            const newPath = target.startsWith("/")
+              ? target
+              : target === ".."
+                ? currentDir.split("/").slice(0, -1).join("/") || "/home/barnaba"
+                : `${currentDir}/${target}`;
+
+            const normalized = newPath.replace(/\/+/g, "/");
+
+            // Check if path exists - handle /home/barnaba as base
+            let current: any = null;
+            let valid = false;
+
+            if (normalized === "/home/barnaba" || normalized === "/home/barnaba/") {
+              current = filesystem["/home/barnaba"];
+              valid = true;
+            } else if (normalized.startsWith("/home/barnaba/")) {
+              const subPath = normalized.substring("/home/barnaba/".length);
+              const parts = subPath.split("/").filter(p => p);
+              current = filesystem["/home/barnaba"];
+
+              for (const part of parts) {
+                if (current && current[part] && typeof current[part] === "object") {
+                  current = current[part];
+                } else {
+                  current = null;
+                  break;
+                }
+              }
+
+              if (current && typeof current === "object") {
+                valid = true;
+              }
+            }
+
+            if (valid) {
+              setCurrentDir(normalized);
+              outputLines.push({ type: "success", content: `Changed directory to ${target}` });
+            } else {
+              outputLines.push({ type: "error", content: `cd: ${target}: Not a directory` });
+            }
+          }
+        }
+        break;
+
+      case "cat":
+        {
+          if (args.length === 0) {
+            outputLines.push({ type: "error", content: "cat: missing file operand" });
+          } else {
+            const fileName = args[0];
+            const path = fileName.startsWith("/") ? fileName : `${currentDir}/${fileName}`;
+            const normalized = path.replace(/\/+/g, "/");
+
+            // Navigate to file - handle /home/barnaba as base
+            let current: any = null;
+
+            if (normalized.startsWith("/home/barnaba/")) {
+              const subPath = normalized.substring("/home/barnaba/".length);
+              const parts = subPath.split("/").filter(p => p);
+              current = filesystem["/home/barnaba"];
+
+              for (const part of parts) {
+                if (current && current[part]) {
+                  current = current[part];
+                } else {
+                  current = null;
+                  break;
+                }
+              }
+            }
+
+            if (current && typeof current === "string") {
+              outputLines.push({ type: "output", content: "" });
+              current.split("\n").forEach(line => {
+                outputLines.push({ type: "output", content: line });
+              });
+              outputLines.push({ type: "output", content: "" });
+            } else {
+              outputLines.push({ type: "error", content: `cat: ${fileName}: No such file or directory` });
+            }
+          }
+        }
+        break;
+
       case "":
         // Empty command, just show prompt
         break;
@@ -570,7 +752,9 @@ export function Terminal({
               {/* Input - Arch Linux style prompt */}
               <form onSubmit={handleSubmit} className="flex items-start gap-2">
                 <div className="flex items-center gap-1 shrink-0">
-                  <span className="text-emerald-400 font-semibold">[barnaba@portfolio ~]</span>
+                  <span className="text-emerald-400 font-semibold">
+                    [barnaba@portfolio {currentDir.replace('/home/barnaba', '~')}]
+                  </span>
                   <span className="text-white font-semibold">$</span>
                 </div>
                 <input

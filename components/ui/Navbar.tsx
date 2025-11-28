@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagneticButton } from "./MagneticButton";
-import { QuantumLogo } from "./QuantumLogo";
 
 const navLinks = [
   { name: "ABOUT", href: "#about" },
@@ -94,24 +93,17 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo/Name */}
-            <MagneticButton className="flex items-center gap-2">
+            <MagneticButton>
               <a
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="flex items-center gap-3"
               >
-                <QuantumLogo size={50} animated={true} interactive={true} />
-                <div className="hidden sm:flex flex-col">
-                  <span className="font-serif font-bold text-sm leading-tight text-gradient">
-                    BARNABA
-                  </span>
-                  <span className="font-serif font-bold text-sm leading-tight text-gradient">
-                    BOBBILI
-                  </span>
-                </div>
+                <span className="font-serif font-bold text-lg sm:text-xl text-gradient">
+                  BARNABA
+                </span>
               </a>
             </MagneticButton>
 
@@ -136,7 +128,7 @@ export function Navbar() {
                     {activeSection === link.href.substring(1) && (
                       <motion.div
                         layoutId="activeSection"
-                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-400"
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-cyan-400"
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
@@ -155,15 +147,15 @@ export function Navbar() {
             >
               <motion.span
                 animate={isMobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                className="w-6 h-0.5 bg-white group-hover:bg-blue-400 transition-colors"
+                className="w-6 h-0.5 bg-white group-hover:bg-cyan-400 transition-colors"
               />
               <motion.span
                 animate={isMobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                className="w-6 h-0.5 bg-white group-hover:bg-blue-400 transition-colors"
+                className="w-6 h-0.5 bg-white group-hover:bg-cyan-400 transition-colors"
               />
               <motion.span
                 animate={isMobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                className="w-6 h-0.5 bg-white group-hover:bg-blue-400 transition-colors"
+                className="w-6 h-0.5 bg-white group-hover:bg-cyan-400 transition-colors"
               />
             </button>
           </div>

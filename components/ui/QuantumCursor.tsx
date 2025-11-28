@@ -41,6 +41,7 @@ export function QuantumCursor() {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   const [isHovering, setIsHovering] = useState(false);
+  const [isTextMode, setIsTextMode] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [particles, setParticles] = useState<EnergyParticle[]>([]);
   const [trails, setTrails] = useState<TrailNode[]>([]);
@@ -135,6 +136,17 @@ export function QuantumCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+
+      // Check for text input elements
+      const isTextInput =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.getAttribute("contenteditable") === "true" ||
+        target.closest("input") ||
+        target.closest("textarea") ||
+        target.closest('[contenteditable="true"]');
+
+      // Check for interactive elements
       const isInteractive =
         target.tagName === "BUTTON" ||
         target.tagName === "A" ||
@@ -142,7 +154,9 @@ export function QuantumCursor() {
         target.closest("a") ||
         target.classList.contains("cursor-pointer") ||
         window.getComputedStyle(target).cursor === "pointer";
-      setIsHovering(!!isInteractive);
+
+      setIsTextMode(!!isTextInput);
+      setIsHovering(!!isInteractive && !isTextInput);
     };
 
     window.addEventListener("mousemove", moveCursor);
@@ -201,9 +215,87 @@ export function QuantumCursor() {
           translateY: "-50%",
         }}
       >
+        {/* TEXT MODE - I-beam Cursor */}
+        <AnimatePresence>
+          {isTextMode && (
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              {/* I-beam cursor design */}
+              <svg
+                width="24"
+                height="32"
+                viewBox="0 0 24 32"
+                className="absolute -left-3 -top-4"
+                style={{
+                  filter: `
+                    drop-shadow(0 0 3px #FFFFFF)
+                    drop-shadow(0 0 6px var(--theme-primary))
+                  `
+                }}
+              >
+                {/* Top bar */}
+                <motion.rect
+                  x="6"
+                  y="2"
+                  width="12"
+                  height="2"
+                  fill="#FFFFFF"
+                  rx="1"
+                />
+                {/* Vertical line */}
+                <motion.rect
+                  x="11"
+                  y="2"
+                  width="2"
+                  height="28"
+                  fill="#FFFFFF"
+                  rx="1"
+                />
+                {/* Bottom bar */}
+                <motion.rect
+                  x="6"
+                  y="28"
+                  width="12"
+                  height="2"
+                  fill="#FFFFFF"
+                  rx="1"
+                />
+
+                {/* Animated pulse effect */}
+                <motion.rect
+                  x="10"
+                  y="0"
+                  width="4"
+                  height="32"
+                  fill="var(--theme-primary)"
+                  opacity="0.3"
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                  }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
+              </svg>
+
+              {/* Text mode indicator */}
+              <motion.div
+                className="absolute -bottom-6 left-0 font-mono text-[6px] opacity-60"
+                style={{ color: `var(--theme-primary)` }}
+                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 1, repeat: Infinity }}
+              >
+                {`>TEXT`}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* NORMAL STATE - Quantum Energy Core */}
         <AnimatePresence>
-          {!isHovering && (
+          {!isHovering && !isTextMode && (
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}

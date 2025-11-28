@@ -40,9 +40,13 @@ export function MatrixRain({ isEnabled = false }: { isEnabled?: boolean }) {
         // Random character
         const char = chars[Math.floor(Math.random() * chars.length)];
 
-        // Cyan to blue gradient
-        const hue = 180 + Math.random() * 20; // Cyan to blue range
-        ctx.fillStyle = `hsl(${hue}, 100%, ${50 + Math.random() * 30}%)`;
+        // Get theme color
+        const themeGlow = getComputedStyle(document.documentElement)
+          .getPropertyValue('--theme-glow')
+          .trim() || '74, 144, 226';
+
+        const lightness = 50 + Math.random() * 30;
+        ctx.fillStyle = `rgba(${themeGlow}, ${lightness / 100})`;
 
         // Draw character
         const x = i * fontSize;

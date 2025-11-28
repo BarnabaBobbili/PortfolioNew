@@ -153,7 +153,7 @@ export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
           ref={subtitleRef}
           className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-mono text-gray-400 mb-4 sm:mb-5 md:mb-6 mt-8 sm:mt-12 md:mt-16 max-w-xs sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed px-4"
         >
-          <span className="text-blue-300">[SYSTEM.INIT]</span> Architecting
+          <span className="text-cyan-400">[SYSTEM.INIT]</span> Architecting
           immersive digital experiences at the intersection of{" "}
           <span className="text-white">art</span>,{" "}
           <span className="text-white">code</span>, and{" "}

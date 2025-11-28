@@ -84,12 +84,6 @@ export function Contact() {
             </MagneticButton>
           ))}
         </motion.div>
-
-        <motion.div className="animate-in mt-16 sm:mt-20 md:mt-24 pt-8 sm:pt-10 md:pt-12 border-t border-white/10">
-          <p className="font-mono text-gray-600 text-xs sm:text-sm">
-            © 2024 All rights reserved
-          </p>
-        </motion.div>
       </div>
     </section>
   );

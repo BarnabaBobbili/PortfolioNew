@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { MagneticButton } from "./MagneticButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,28 +74,27 @@ export function About() {
         <div ref={contentRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12">
           <div>
             <p className="text-base sm:text-lg md:text-xl text-gray-100 mb-4 sm:mb-5 md:mb-6 leading-relaxed">
-              I'm a creative technologist specializing in immersive web
-              experiences that blur the line between art and engineering.
+              Hardworking and eager to learn, with a solid foundation in programming and computer systems.
+              Willing to put in the effort to take on challenges and improve continuously.
             </p>
             <p className="text-base sm:text-lg md:text-xl text-gray-100 mb-4 sm:mb-5 md:mb-6 leading-relaxed">
-              With expertise in WebGL, Three.js, and modern frontend
-              frameworks, I craft digital experiences that captivate and
-              inspire.
+              Currently pursuing M.Tech in Computer Science and Engineering at Amrita Vishwa Vidhyapeetam,
+              with a passion for building secure, scalable applications and exploring cutting-edge technologies.
             </p>
           </div>
 
           <div>
             <h3 className="text-xl sm:text-2xl font-mono font-semibold mb-4 sm:mb-5 md:mb-6 text-white">
-              Expertise
+              Core Competencies
             </h3>
             <ul className="space-y-2 sm:space-y-3 font-mono text-sm sm:text-base text-gray-200">
               {[
-                "WebGL & Three.js",
-                "React & Next.js",
-                "GLSL Shaders",
-                "Creative Coding",
-                "3D Animation",
-                "Interactive Design",
+                "Full-Stack Development",
+                "Multi-Modal Security Systems",
+                "Machine Learning & AI",
+                "Cloud Technologies (AWS, Azure)",
+                "Database Management",
+                "Version Control & DevOps",
               ].map((skill, i) => (
                 <motion.li
                   key={skill}
@@ -111,6 +111,20 @@ export function About() {
             </ul>
           </div>
         </div>
+
+        <motion.div
+          className="mt-8 sm:mt-10 md:mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <MagneticButton className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-void font-mono font-medium text-sm sm:text-base rounded-full hover:shadow-2xl hover:shadow-white/20 transition-shadow">
+            <a href={process.env.NEXT_PUBLIC_BLOG_URL || "#"} target="_blank" rel="noopener noreferrer">
+              My Blog
+            </a>
+          </MagneticButton>
+        </motion.div>
       </div>
     </section>
   );

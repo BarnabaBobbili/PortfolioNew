@@ -11,30 +11,12 @@ gsap.registerPlugin(ScrollTrigger);
 const publications = [
   {
     id: 1,
-    title: "Neural Rendering Techniques for Real-Time Web Applications",
-    conference: "SIGGRAPH 2024",
-    authors: "Your Name, et al.",
-    year: "2024",
+    title: "Multi-Modal Security Integration and Role-Based Access Control for Secure File Management System",
+    conference: "IEEE",
+    authors: "Barnaba Bobbili, et al.",
+    year: "2025",
     link: "#",
-    tags: ["Neural Rendering", "WebGL 2.0", "Real-time"],
-  },
-  {
-    id: 2,
-    title: "Optimizing Three.js Performance for Large-Scale Interactive Experiences",
-    conference: "ACM CHI 2024",
-    authors: "Your Name, Co-Author",
-    year: "2024",
-    link: "#",
-    tags: ["Performance", "Three.js", "Optimization"],
-  },
-  {
-    id: 3,
-    title: "Physics-Based Animation Systems for Modern Web Interfaces",
-    conference: "IEEE VIS 2023",
-    authors: "Your Name, et al.",
-    year: "2023",
-    link: "#",
-    tags: ["Physics", "Animation", "GPU"],
+    tags: ["Security", "Biometrics", "Access Control"],
   },
 ];
 
@@ -47,18 +29,20 @@ export function Publications() {
 
     const items = sectionRef.current.querySelectorAll(".publication-item");
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       gsap.fromTo(
         item,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
-          ease: "power3.out",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: index * 0.1,
           scrollTrigger: {
             trigger: item,
-            start: "top 85%",
+            start: "top 90%",
+            end: "top 20%",
             toggleActions: "play none none reverse",
           },
         }
@@ -88,7 +72,7 @@ export function Publications() {
         {publications.map((pub) => (
           <div
             key={pub.id}
-            className={`publication-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-300 ${
+            className={`publication-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-500 ease-out ${
               hoveredId === null
                 ? ""
                 : hoveredId === pub.id
@@ -101,7 +85,7 @@ export function Publications() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start md:items-center">
                 <div className="md:col-span-1">
-                  <span className="font-mono text-blue-400 text-xs sm:text-sm">
+                  <span className="font-mono text-cyan-400 text-xs sm:text-sm">
                     {pub.year}
                   </span>
                 </div>
@@ -114,7 +98,7 @@ export function Publications() {
                     {pub.conference} — {pub.authors}
                   </p>
 
-                  <MagneticButton className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 border border-white/20 rounded-full hover:border-blue-400/50 hover:bg-white/5 transition-all font-mono text-xs sm:text-sm">
+                  <MagneticButton className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 border border-white/20 rounded-full hover:border-cyan-400/50 hover:bg-white/5 transition-all font-mono text-xs sm:text-sm">
                     <a
                       href={pub.link}
                       target="_blank"

@@ -11,6 +11,36 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     id: 1,
+    title: "Canteen Delight",
+    description: "A sophisticated full-stack canteen ecosystem that transforms food service operations through intelligent automation. Seamlessly orchestrates order management, real-time inventory tracking with smart expiry alerts, dynamic supplier coordination, and comprehensive payment processing. Features granular role-based access control across multiple user hierarchies, live analytics dashboards with visual insights, and end-to-end activity audit trails—all powered by a robust MERN architecture with JWT authentication.",
+    year: "2024",
+    tags: ["React", "Node.js", "MongoDB", "Express"],
+    preview: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
+    github: "https://github.com/BarnabaBobbili/Canteen-FSD",
+    live: "https://github.com/BarnabaBobbili/Canteen-FSD",
+  },
+  {
+    id: 2,
+    title: "God-Tier Personal Blog",
+    description: "An immersive content platform engineered with Next.js 15's cutting-edge App Router and Server Actions, powered by Supabase's PostgreSQL infrastructure. Features a sophisticated Notion-style editor with drag-and-drop media uploads, threaded comment discussions with optimistic UI rendering, and row-level security authentication. Showcases premium Aceternity and Magic UI components including cursor-following spotlight effects, animated scroll trackers, and 3D wobble animations—all wrapped in a responsive dark theme with real-time admin dashboard.",
+    year: "2024",
+    tags: ["Next.js 15", "Supabase", "TypeScript", "Tailwind CSS"],
+    preview: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800",
+    github: "#",
+    live: "#",
+  },
+  {
+    id: 3,
+    title: "Sentinel Auth",
+    description: "Enterprise-grade Zero Trust authentication platform featuring tri-modal biometric verification through facial recognition, voice analysis, and behavioral profiling. Implements privacy-first architecture where raw biometric data never persists—only mathematical embeddings stored in vector databases. Built entirely with FOSS technologies including DeepFace, SpeechBrain, and MediaPipe for client-side liveness detection. Features dynamic trust scoring, policy-as-code authorization via OPA, and OIDC integration with ZITADEL—orchestrated through containerized microservices.",
+    year: "2024",
+    tags: ["FastAPI", "Next.js", "MediaPipe", "Docker"],
+    preview: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800",
+    github: "#",
+    live: "#",
+  },
+  {
+    id: 4,
     title: "Ethereal Commerce",
     description: "Next-gen e-commerce platform with immersive 3D product views",
     year: "2024",
@@ -20,7 +50,7 @@ const projects = [
     live: "https://ethereal-commerce.demo.com",
   },
   {
-    id: 2,
+    id: 5,
     title: "Quantum Portfolio",
     description: "Award-winning portfolio with particle physics interactions",
     year: "2024",
@@ -30,7 +60,7 @@ const projects = [
     live: "https://quantum-portfolio.demo.com",
   },
   {
-    id: 3,
+    id: 6,
     title: "Neural Gallery",
     description: "AI-powered art gallery with generative visuals",
     year: "2023",
@@ -40,7 +70,7 @@ const projects = [
     live: "https://neural-gallery.demo.com",
   },
   {
-    id: 4,
+    id: 7,
     title: "Void Interface",
     description: "Minimalist OS interface concept with fluid animations",
     year: "2023",
@@ -60,21 +90,23 @@ export function Work() {
 
     const projectItems = sectionRef.current.querySelectorAll(".project-item");
 
-    projectItems.forEach((item) => {
+    projectItems.forEach((item, index) => {
       gsap.fromTo(
         item,
         {
           opacity: 0,
-          y: 100,
+          y: 50,
         },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
-          ease: "power3.out",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: index * 0.1,
           scrollTrigger: {
             trigger: item,
-            start: "top 85%",
+            start: "top 90%",
+            end: "top 20%",
             toggleActions: "play none none reverse",
           },
         }
@@ -104,7 +136,7 @@ export function Work() {
         {projects.map((project) => (
           <div
             key={project.id}
-            className={`project-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-300 ${
+            className={`project-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-500 ease-out ${
               hoveredId === null
                 ? ""
                 : hoveredId === project.id
@@ -115,24 +147,27 @@ export function Work() {
             onMouseLeave={() => setHoveredId(null)}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+              {/* Title - Full Width */}
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold mb-4 sm:mb-6 md:mb-8 text-white">
+                {project.title}
+              </h3>
+
+              {/* Content Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start md:items-center">
                 <div className="md:col-span-1">
-                  <span className="font-mono text-blue-400 text-xs sm:text-sm">
+                  <span className="font-mono text-cyan-400 text-xs sm:text-sm">
                     {project.year}
                   </span>
                 </div>
 
                 <div className="md:col-span-5">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold mb-2 text-white">
-                    {project.title}
-                  </h3>
                   <p className="text-gray-200 text-sm sm:text-base md:text-lg mb-3 sm:mb-4">
                     {project.description}
                   </p>
 
                   <div className="flex flex-wrap gap-3 sm:gap-4">
                     <MagneticButton
-                      className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 border border-white/20 rounded-full hover:border-blue-400/50 hover:bg-white/5 transition-all font-mono text-xs sm:text-sm"
+                      className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 border border-white/20 rounded-full hover:border-cyan-400/50 hover:bg-white/5 transition-all font-mono text-xs sm:text-sm"
                     >
                       <a
                         href={project.github}
@@ -156,7 +191,7 @@ export function Work() {
                       </a>
                     </MagneticButton>
                     <MagneticButton
-                      className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-500/20 border border-blue-400/50 text-blue-300 rounded-full hover:bg-blue-500/30 transition-all font-mono text-xs sm:text-sm"
+                      className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 rounded-full hover:bg-cyan-500/30 transition-all font-mono text-xs sm:text-sm"
                     >
                       <a
                         href={project.live}

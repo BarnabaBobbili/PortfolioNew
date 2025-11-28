@@ -23,6 +23,13 @@ export function ParticleNetwork({ isEnabled = false }: { isEnabled?: boolean }) 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Get theme color from CSS variable
+    const getThemeGlow = () => {
+      return getComputedStyle(document.documentElement)
+        .getPropertyValue('--theme-glow')
+        .trim() || '74, 144, 226';
+    };
+
     // Set canvas size
     const setCanvasSize = () => {
       canvas.width = window.innerWidth;
@@ -87,7 +94,7 @@ export function ParticleNetwork({ isEnabled = false }: { isEnabled?: boolean }) 
         // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(74, 144, 226, 0.6)";
+        ctx.fillStyle = `rgba(${getThemeGlow()}, 0.6)`;
         ctx.fill();
 
         // Draw connections
@@ -101,7 +108,7 @@ export function ParticleNetwork({ isEnabled = false }: { isEnabled?: boolean }) 
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
             const opacity = (120 - distance) / 120;
-            ctx.strokeStyle = `rgba(74, 144, 226, ${opacity * 0.3})`;
+            ctx.strokeStyle = `rgba(${getThemeGlow()}, ${opacity * 0.3})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }

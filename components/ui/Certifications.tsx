@@ -8,10 +8,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const certifications = [
-  { id: 1, name: "AWS Certified Solutions Architect", year: "2023" },
-  { id: 2, name: "Google Cloud Professional Developer", year: "2023" },
-  { id: 3, name: "Three.js Journey - Complete Course", year: "2022" },
-  { id: 4, name: "Advanced WebGL & GLSL Shaders", year: "2022" },
+  { id: 1, name: "Oracle Cloud Infrastructure - Certified Foundations Associate", year: "2024" },
+  { id: 2, name: "Data Analysis with Python - IBM", year: "2024" },
+  { id: 3, name: "Java Data Structures and Algorithms - Udemy", year: "2024" },
 ];
 
 export function Certifications() {
@@ -23,18 +22,20 @@ export function Certifications() {
 
     const items = sectionRef.current.querySelectorAll(".certification-item");
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       gsap.fromTo(
         item,
-        { opacity: 0, y: 100 },
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
-          ease: "power3.out",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: index * 0.1,
           scrollTrigger: {
             trigger: item,
-            start: "top 85%",
+            start: "top 90%",
+            end: "top 20%",
             toggleActions: "play none none reverse",
           },
         }
@@ -64,7 +65,7 @@ export function Certifications() {
         {certifications.map((cert) => (
           <div
             key={cert.id}
-            className={`certification-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-300 ${
+            className={`certification-item border-b border-white/10 py-6 sm:py-7 md:py-8 transition-all duration-500 ease-out ${
               hoveredId === null
                 ? ""
                 : hoveredId === cert.id
@@ -77,7 +78,7 @@ export function Certifications() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start md:items-center">
                 <div className="md:col-span-1">
-                  <span className="font-mono text-blue-400 text-xs sm:text-sm">
+                  <span className="font-mono text-cyan-400 text-xs sm:text-sm">
                     {cert.year}
                   </span>
                 </div>
@@ -93,7 +94,7 @@ export function Certifications() {
 
                 <div className="md:col-span-6">
                   <div className="flex gap-2 sm:gap-3 flex-wrap">
-                    <span className="px-3 sm:px-4 py-1.5 sm:py-2 border border-blue-400/50 bg-blue-500/10 rounded-full font-mono text-xs sm:text-sm text-blue-300">
+                    <span className="px-3 sm:px-4 py-1.5 sm:py-2 border border-cyan-400/50 bg-cyan-500/10 rounded-full font-mono text-xs sm:text-sm text-cyan-300">
                       Certified
                     </span>
                   </div>

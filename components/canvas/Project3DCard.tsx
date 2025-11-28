@@ -50,7 +50,7 @@ export function Project3DCard({ position, title, index }: Project3DCardProps) {
       <mesh ref={glowRef} position={[0, 0, -0.01]}>
         <planeGeometry args={[2.1, 1.3]} />
         <meshBasicMaterial
-          color="#4A90E2"
+          color="var(--theme-primary)"
           transparent
           opacity={0.3}
           side={THREE.BackSide}
@@ -61,7 +61,7 @@ export function Project3DCard({ position, title, index }: Project3DCardProps) {
       <Text
         position={[0, 0, 0.01]}
         fontSize={0.15}
-        color="#4A90E2"
+        color="var(--theme-primary)"
         anchorX="center"
         anchorY="middle"
         font="/fonts/GeistMono.ttf"
@@ -78,7 +78,7 @@ export function Project3DCard({ position, title, index }: Project3DCardProps) {
       ].map((pos, i) => (
         <mesh key={i} position={[pos[0], pos[1], 0.02]}>
           <boxGeometry args={[0.1, 0.1, 0.01]} />
-          <meshBasicMaterial color="#4A90E2" />
+          <meshBasicMaterial color="var(--theme-primary)" />
         </mesh>
       ))}
     </group>

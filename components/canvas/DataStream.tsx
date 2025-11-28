@@ -92,7 +92,7 @@ export function DataStream() {
       </bufferGeometry>
       <pointsMaterial
         size={0.05}
-        color="#4A90E2"
+        color="var(--theme-primary)"
         transparent
         opacity={0.6}
         sizeAttenuation

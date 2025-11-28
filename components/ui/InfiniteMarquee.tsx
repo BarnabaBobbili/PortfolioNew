@@ -109,9 +109,9 @@ export function InfiniteMarquee({
         className="flex whitespace-nowrap font-mono text-4xl md:text-7xl lg:text-8xl font-bold transition-all duration-300"
         style={{
           willChange: 'transform',
-          color: glitchActive ? '#22d3ee' : isHovered ? '#06b6d4' : 'rgba(255, 255, 255, 0.2)',
-          textShadow: glitchActive ? '2px 2px 0px #ff00ff, -2px -2px 0px #00ffff' : 'none',
-          filter: isHovered ? 'drop-shadow(0 0 20px rgba(6, 182, 212, 0.5))' : 'none'
+          color: glitchActive ? 'var(--theme-light)' : isHovered ? 'var(--theme-primary)' : 'rgba(255, 255, 255, 0.2)',
+          textShadow: glitchActive ? '2px 2px 0px #ff00ff, -2px -2px 0px var(--theme-light)' : 'none',
+          filter: isHovered ? `drop-shadow(0 0 20px rgba(var(--theme-glow), 0.5))` : 'none'
         }}
       >
         {/* Repeat content for seamless loop */}

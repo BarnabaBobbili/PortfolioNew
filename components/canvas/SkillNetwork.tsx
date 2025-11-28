@@ -92,7 +92,7 @@ export function SkillNetwork() {
           key={index}
           start={conn.from}
           end={conn.to}
-          color="#4A90E2"
+          color="var(--theme-primary)"
           opacity={hoveredNode ? 0.2 : 0.3}
         />
       ))}
