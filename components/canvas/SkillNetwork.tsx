@@ -155,18 +155,14 @@ export function SkillNetwork() {
 
 // Line component for connections
 function Line({ start, end, color, opacity }: { start: THREE.Vector3; end: THREE.Vector3; color: string; opacity: number }) {
-  const ref = useRef<THREE.Line>(null);
-
-  const geometry = useMemo(() => {
+  const lineObject = useMemo(() => {
     const points = [start, end];
-    return new THREE.BufferGeometry().setFromPoints(points);
-  }, [start, end]);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ color, transparent: true, opacity });
+    return new THREE.Line(geometry, material);
+  }, [start, end, color, opacity]);
 
-  return (
-    <line ref={ref} geometry={geometry}>
-      <lineBasicMaterial color={color} transparent opacity={opacity} />
-    </line>
-  );
+  return <primitive object={lineObject} />;
 }
 
 // Particles around hovered node
@@ -199,9 +195,7 @@ function NodeParticles({ color }: { color: string }) {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <pointsMaterial

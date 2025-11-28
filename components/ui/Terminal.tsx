@@ -144,7 +144,7 @@ export function Terminal({
 
     switch (command) {
       case "help":
-        newHistory.push(
+        outputLines.push(
           { type: "info", content: "" },
           { type: "info", content: "═══════════════════════ AVAILABLE COMMANDS ═══════════════════════" },
           { type: "output", content: "" },
@@ -178,7 +178,7 @@ export function Terminal({
         break;
 
       case "neofetch":
-        newHistory.push(
+        outputLines.push(
           { type: "output", content: "" },
           { type: "info", content: "        ██████╗  ██████╗ ██████╗ ████████╗███████╗ ██████╗ ██╗     ██╗ ██████╗ " },
           { type: "info", content: "        ██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔═══██╗██║     ██║██╔═══██╗" },
@@ -210,7 +210,7 @@ export function Terminal({
         break;
 
       case "status":
-        newHistory.push(
+        outputLines.push(
           { type: "output", content: "" },
           { type: "success", content: "═══ CURRENT SETTINGS ═══" },
           { type: "output", content: "" },
@@ -227,7 +227,7 @@ export function Terminal({
 
       case "theme":
         if (args.length === 0) {
-          newHistory.push(
+          outputLines.push(
             { type: "error", content: "Usage: theme <color>" },
             { type: "output", content: "Available themes: blue, cyan, purple, green, red" },
             { type: "output", content: `Current theme: ${currentTheme}` }
@@ -235,12 +235,12 @@ export function Terminal({
         } else {
           const color = args[0].toLowerCase();
           if (["blue", "cyan", "purple", "green", "red"].includes(color)) {
-            newHistory.push({ type: "success", content: `✓ Theme changed to ${color.toUpperCase()}` });
+            outputLines.push({ type: "success", content: `✓ Theme changed to ${color.toUpperCase()}` });
             if (onThemeChange) {
               onThemeChange(color as Theme);
             }
           } else {
-            newHistory.push({
+            outputLines.push({
               type: "error",
               content: `Invalid theme '${color}'. Available: blue, cyan, purple, green, red`
             });
@@ -251,7 +251,7 @@ export function Terminal({
       case "scanlines":
         if (args.length === 0 || args[0].toLowerCase() === "toggle") {
           const newValue = !currentEffects.scanlines;
-          newHistory.push({
+          outputLines.push({
             type: "success",
             content: `✓ Scanlines ${newValue ? 'ENABLED' : 'DISABLED'}`
           });
@@ -261,17 +261,17 @@ export function Terminal({
         } else {
           const action = args[0].toLowerCase();
           if (action === "on") {
-            newHistory.push({ type: "success", content: "✓ Scanlines ENABLED" });
+            outputLines.push({ type: "success", content: "✓ Scanlines ENABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, scanlines: true });
             }
           } else if (action === "off") {
-            newHistory.push({ type: "success", content: "✓ Scanlines DISABLED" });
+            outputLines.push({ type: "success", content: "✓ Scanlines DISABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, scanlines: false });
             }
           } else {
-            newHistory.push({ type: "error", content: "Usage: scanlines [on|off|toggle]" });
+            outputLines.push({ type: "error", content: "Usage: scanlines [on|off|toggle]" });
           }
         }
         break;
@@ -279,7 +279,7 @@ export function Terminal({
       case "matrix":
         if (args.length === 0 || args[0].toLowerCase() === "toggle") {
           const newValue = !currentEffects.matrixRain;
-          newHistory.push({
+          outputLines.push({
             type: "success",
             content: `✓ Matrix rain ${newValue ? 'ENABLED' : 'DISABLED'}`
           });
@@ -289,17 +289,17 @@ export function Terminal({
         } else {
           const action = args[0].toLowerCase();
           if (action === "on") {
-            newHistory.push({ type: "success", content: "✓ Matrix rain ENABLED" });
+            outputLines.push({ type: "success", content: "✓ Matrix rain ENABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, matrixRain: true });
             }
           } else if (action === "off") {
-            newHistory.push({ type: "success", content: "✓ Matrix rain DISABLED" });
+            outputLines.push({ type: "success", content: "✓ Matrix rain DISABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, matrixRain: false });
             }
           } else {
-            newHistory.push({ type: "error", content: "Usage: matrix [on|off|toggle]" });
+            outputLines.push({ type: "error", content: "Usage: matrix [on|off|toggle]" });
           }
         }
         break;
@@ -307,7 +307,7 @@ export function Terminal({
       case "network":
         if (args.length === 0 || args[0].toLowerCase() === "toggle") {
           const newValue = !currentEffects.particleNetwork;
-          newHistory.push({
+          outputLines.push({
             type: "success",
             content: `✓ Particle network ${newValue ? 'ENABLED' : 'DISABLED'}`
           });
@@ -317,17 +317,17 @@ export function Terminal({
         } else {
           const action = args[0].toLowerCase();
           if (action === "on") {
-            newHistory.push({ type: "success", content: "✓ Particle network ENABLED" });
+            outputLines.push({ type: "success", content: "✓ Particle network ENABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, particleNetwork: true });
             }
           } else if (action === "off") {
-            newHistory.push({ type: "success", content: "✓ Particle network DISABLED" });
+            outputLines.push({ type: "success", content: "✓ Particle network DISABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, particleNetwork: false });
             }
           } else {
-            newHistory.push({ type: "error", content: "Usage: network [on|off|toggle]" });
+            outputLines.push({ type: "error", content: "Usage: network [on|off|toggle]" });
           }
         }
         break;
@@ -335,7 +335,7 @@ export function Terminal({
       case "static":
         if (args.length === 0 || args[0].toLowerCase() === "toggle") {
           const newValue = !currentEffects.staticNoise;
-          newHistory.push({
+          outputLines.push({
             type: "success",
             content: `✓ Static noise ${newValue ? 'ENABLED' : 'DISABLED'}`
           });
@@ -345,74 +345,74 @@ export function Terminal({
         } else {
           const action = args[0].toLowerCase();
           if (action === "on") {
-            newHistory.push({ type: "success", content: "✓ Static noise ENABLED" });
+            outputLines.push({ type: "success", content: "✓ Static noise ENABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, staticNoise: true });
             }
           } else if (action === "off") {
-            newHistory.push({ type: "success", content: "✓ Static noise DISABLED" });
+            outputLines.push({ type: "success", content: "✓ Static noise DISABLED" });
             if (onEffectsChange) {
               onEffectsChange({ ...currentEffects, staticNoise: false });
             }
           } else {
-            newHistory.push({ type: "error", content: "Usage: static [on|off|toggle]" });
+            outputLines.push({ type: "error", content: "Usage: static [on|off|toggle]" });
           }
         }
         break;
 
       case "/about":
         if (scrollToSection("about")) {
-          newHistory.push({ type: "success", content: "Navigating to About section..." });
+          outputLines.push({ type: "success", content: "Navigating to About section..." });
         } else {
-          newHistory.push({ type: "error", content: "Section not found" });
+          outputLines.push({ type: "error", content: "Section not found" });
         }
         break;
 
       case "/work":
         if (scrollToSection("work")) {
-          newHistory.push({ type: "success", content: "Navigating to Work section..." });
+          outputLines.push({ type: "success", content: "Navigating to Work section..." });
         } else {
-          newHistory.push({ type: "error", content: "Section not found" });
+          outputLines.push({ type: "error", content: "Section not found" });
         }
         break;
 
       case "/skills":
         if (scrollToSection("skills")) {
-          newHistory.push({ type: "success", content: "Navigating to Skills section..." });
+          outputLines.push({ type: "success", content: "Navigating to Skills section..." });
         } else {
-          newHistory.push({ type: "error", content: "Section not found" });
+          outputLines.push({ type: "error", content: "Section not found" });
         }
         break;
 
       case "/publications":
         if (scrollToSection("publications")) {
-          newHistory.push({ type: "success", content: "Navigating to Publications..." });
+          outputLines.push({ type: "success", content: "Navigating to Publications..." });
         } else {
-          newHistory.push({ type: "error", content: "Section not found" });
+          outputLines.push({ type: "error", content: "Section not found" });
         }
         break;
 
       case "/education":
         if (scrollToSection("education")) {
-          newHistory.push({ type: "success", content: "Navigating to Education..." });
+          outputLines.push({ type: "success", content: "Navigating to Education..." });
         } else {
-          newHistory.push({ type: "error", content: "Section not found" });
+          outputLines.push({ type: "error", content: "Section not found" });
         }
         break;
 
       case "/certifications":
         if (scrollToSection("certifications")) {
-          newHistory.push({ type: "success", content: "Navigating to Certifications..." });
+          outputLines.push({ type: "success", content: "Navigating to Certifications..." });
         } else {
-          newHistory.push({ type: "error", content: "Section not found" });
+          outputLines.push({ type: "error", content: "Section not found" });
         }
         break;
 
       case "/contact":
         if (scrollToSection("contact")) {
-          newHistory.push({ type: "success", content: "Navigating to Contact section..." });
+          outputLines.push({ type: "success", content: "Navigating to Contact section..." });
         } else {
-          newHistory.push({ type: "error", content: "Section not found" });
+          outputLines.push({ type: "error", content: "Section not found" });
         }
         break;
 
@@ -433,7 +433,7 @@ export function Terminal({
         return;
 
       case "exit":
-        newHistory.push({ type: "success", content: "Terminal closed." });
+        outputLines.push({ type: "success", content: "Terminal closed." });
         setTimeout(() => setIsOpen(false), 500);
         break;
 
@@ -442,13 +442,13 @@ export function Terminal({
         break;
 
       default:
-        newHistory.push({
+        outputLines.push({
           type: "error",
           content: `Command not found: ${command}. Type 'help' for available commands.`,
         });
     }
 
-    setHistory(newHistory);
+    setHistory(prev => [...prev, ...outputLines]);
   };
 
   // Handle input submission
