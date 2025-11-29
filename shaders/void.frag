@@ -51,5 +51,5 @@ void main() {
   // Add subtle gradient
   color += vec3(0.0, 0.02, 0.05) * (1.0 - st.y);
 
-  gl_FragColor = vec4(color, 1.0);
+  gl_FragColor = vec4(color, 0.85);
 }

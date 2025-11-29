@@ -41,11 +41,11 @@ export function SceneCanvas({ particleDirection = 'towards', show3DText = true }
 
   // Show placeholder div during server-side rendering
   if (!mounted) {
-    return <div className="fixed inset-0 -z-10" />;
+    return <div className="fixed inset-0 z-[6]" />;
   }
 
   return (
-    <div className="fixed inset-0 -z-10 pointer-events-none">
+    <div className="fixed inset-0 z-[6] pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }} // Camera 5 units back, 75° field of view
         dpr={[1, 1.5]} // Device pixel ratio: min 1, max 1.5 for performance

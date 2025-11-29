@@ -98,6 +98,7 @@ export default function Home() {
         onSettingsChange={setEffectsSettings}
         onThemeChange={setCurrentTheme}
         currentTheme={currentTheme}
+        currentEffects={effectsSettings}
       />
       <ScrollProgress />
       <QuantumCursor />

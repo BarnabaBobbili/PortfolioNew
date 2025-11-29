@@ -181,13 +181,13 @@ function Letter3D({
 
     // Emissive flare then settle
     gsap.to(material, {
-      emissiveIntensity: 4,
+      emissiveIntensity: 5,
       duration: 0.3,
       delay: delay + 0.2,
       ease: "power2.in",
       onComplete: () => {
         gsap.to(material, {
-          emissiveIntensity: 2.5,
+          emissiveIntensity: 3.5,
           duration: 0.5,
           ease: "power2.out",
         });
@@ -212,10 +212,10 @@ function Letter3D({
     meshRef.current.rotation.y = Math.cos(time * 0.4 + phase) * 0.02;
 
     // Glow flicker effect (more intense during decode, subtle after)
-    const flickerIntensity = isDecoded ? 0.1 : 0.3;
+    const flickerIntensity = isDecoded ? 0.15 : 0.3;
     const flicker = 1 + Math.sin(time * flickerSpeed) * flickerIntensity + Math.random() * 0.05;
     if (materialRef.current.emissiveIntensity > 0.5) {
-      materialRef.current.emissiveIntensity = 2.5 * flicker; // Pulse the glow
+      materialRef.current.emissiveIntensity = 3.5 * flicker; // Pulse the glow
     }
   });
 
@@ -236,7 +236,7 @@ function Letter3D({
         ref={materialRef}
         color={color}
         emissive={color}
-        emissiveIntensity={2.5}
+        emissiveIntensity={3.5}
         metalness={0.8}
         roughness={0.2}
         toneMapped={false}

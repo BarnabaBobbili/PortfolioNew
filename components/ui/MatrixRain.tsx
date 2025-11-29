@@ -19,7 +19,7 @@ export function MatrixRain({ isEnabled = false }: { isEnabled?: boolean }) {
 
     // Characters - Katakana + Latin + Numbers
     const chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
-    const fontSize = 14;
+    const fontSize = 16;
     const columns = canvas.width / fontSize;
 
     // Array to track Y position of each column
@@ -30,11 +30,11 @@ export function MatrixRain({ isEnabled = false }: { isEnabled?: boolean }) {
 
     // Draw function
     const draw = () => {
-      // Black background with transparency for trail effect
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      // Black background with transparency for trail effect (less fade for stronger trails)
+      ctx.fillStyle = "rgba(0, 0, 0, 0.03)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.font = `${fontSize}px monospace`;
+      ctx.font = `bold ${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {
         // Random character
@@ -45,13 +45,19 @@ export function MatrixRain({ isEnabled = false }: { isEnabled?: boolean }) {
           .getPropertyValue('--theme-glow')
           .trim() || '74, 144, 226';
 
-        const lightness = 50 + Math.random() * 30;
+        // Brighter and more opaque characters
+        const lightness = 60 + Math.random() * 40;
         ctx.fillStyle = `rgba(${themeGlow}, ${lightness / 100})`;
 
-        // Draw character
+        // Draw character with glow effect
         const x = i * fontSize;
         const y = drops[i] * fontSize;
+
+        // Add shadow/glow for stronger effect
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `rgba(${themeGlow}, 0.8)`;
         ctx.fillText(char, x, y);
+        ctx.shadowBlur = 0;
 
         // Reset drop when it goes off screen
         // Add randomness to create varying lengths
@@ -64,8 +70,8 @@ export function MatrixRain({ isEnabled = false }: { isEnabled?: boolean }) {
       }
     };
 
-    // Animation loop
-    const interval = setInterval(draw, 50);
+    // Animation loop (faster for more intensity)
+    const interval = setInterval(draw, 40);
 
     // Handle resize
     const handleResize = () => {
@@ -87,9 +93,10 @@ export function MatrixRain({ isEnabled = false }: { isEnabled?: boolean }) {
           <motion.canvas
             ref={canvasRef}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 0.9 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 pointer-events-none z-[5]"
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 pointer-events-none z-[4]"
           />
         )}
       </AnimatePresence>

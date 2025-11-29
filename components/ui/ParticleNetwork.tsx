@@ -39,17 +39,17 @@ export function ParticleNetwork({ isEnabled = false }: { isEnabled?: boolean }) 
     setCanvasSize();
     window.addEventListener("resize", setCanvasSize);
 
-    // Initialize particles
-    const particleCount = 80;
+    // Initialize particles (increased count for stronger effect)
+    const particleCount = 120;
     const particles: Particle[] = [];
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        radius: Math.random() * 2 + 1,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        radius: Math.random() * 2.5 + 1.5,
       });
     }
 
@@ -64,7 +64,7 @@ export function ParticleNetwork({ isEnabled = false }: { isEnabled?: boolean }) 
 
     // Animation loop
     const animate = () => {
-      ctx.fillStyle = "rgba(10, 10, 15, 0.05)";
+      ctx.fillStyle = "rgba(10, 10, 15, 0.03)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle, i) => {
@@ -76,40 +76,45 @@ export function ParticleNetwork({ isEnabled = false }: { isEnabled?: boolean }) 
         if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
         if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
 
-        // Mouse interaction
+        // Mouse interaction (stronger effect)
         const dx = mouseRef.current.x - particle.x;
         const dy = mouseRef.current.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < 150) {
-          const force = (150 - distance) / 150;
-          particle.vx -= (dx / distance) * force * 0.1;
-          particle.vy -= (dy / distance) * force * 0.1;
+        if (distance < 200) {
+          const force = (200 - distance) / 200;
+          particle.vx -= (dx / distance) * force * 0.15;
+          particle.vy -= (dy / distance) * force * 0.15;
         }
 
         // Damping
         particle.vx *= 0.99;
         particle.vy *= 0.99;
 
-        // Draw particle
+        // Draw particle with glow
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${getThemeGlow()}, 0.6)`;
-        ctx.fill();
 
-        // Draw connections
+        // Add glow effect
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = `rgba(${getThemeGlow()}, 0.8)`;
+        ctx.fillStyle = `rgba(${getThemeGlow()}, 0.85)`;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Draw connections (stronger and longer reach)
         particles.slice(i + 1).forEach((otherParticle) => {
           const dx = particle.x - otherParticle.x;
           const dy = particle.y - otherParticle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 120) {
+          if (distance < 150) {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            const opacity = (120 - distance) / 120;
-            ctx.strokeStyle = `rgba(${getThemeGlow()}, ${opacity * 0.3})`;
-            ctx.lineWidth = 1;
+            const opacity = (150 - distance) / 150;
+            ctx.strokeStyle = `rgba(${getThemeGlow()}, ${opacity * 0.5})`;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
           }
         });
@@ -134,9 +139,10 @@ export function ParticleNetwork({ isEnabled = false }: { isEnabled?: boolean }) 
           <motion.canvas
             ref={canvasRef}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 0.95 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 pointer-events-none z-[3]"
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 pointer-events-none z-[5]"
           />
         )}
       </AnimatePresence>

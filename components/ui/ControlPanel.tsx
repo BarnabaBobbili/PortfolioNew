@@ -64,6 +64,7 @@ interface ControlPanelProps {
   onSettingsChange?: (settings: ControlPanelSettings) => void;
   onThemeChange?: (theme: Theme) => void;
   currentTheme?: Theme;
+  currentEffects?: ControlPanelSettings;
 }
 
 /**
@@ -76,7 +77,7 @@ interface ControlPanelProps {
  *
  * Design: Minimal footprint when closed, full access when open
  */
-export function ControlPanel({ onSettingsChange, onThemeChange, currentTheme: externalTheme }: ControlPanelProps) {
+export function ControlPanel({ onSettingsChange, onThemeChange, currentTheme: externalTheme, currentEffects: externalEffects }: ControlPanelProps) {
   const [currentTheme, setCurrentTheme] = useState<Theme>(externalTheme || "blue");
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"theme" | "effects">("theme");
@@ -89,12 +90,19 @@ export function ControlPanel({ onSettingsChange, onThemeChange, currentTheme: ex
   }, [externalTheme]);
 
   // Effects state
-  const [effects, setEffects] = useState<ControlPanelSettings>({
+  const [effects, setEffects] = useState<ControlPanelSettings>(externalEffects || {
     staticNoise: false,
     particleNetwork: false,
     matrixRain: false,
     scanlines: false,
   });
+
+  // Sync with external effects changes (from Terminal commands)
+  useEffect(() => {
+    if (externalEffects) {
+      setEffects(externalEffects);
+    }
+  }, [externalEffects]);
 
   useEffect(() => {
     const theme = themes[currentTheme];
@@ -150,13 +158,6 @@ export function ControlPanel({ onSettingsChange, onThemeChange, currentTheme: ex
     `;
   }, [currentTheme]);
 
-  // Notify parent of effects changes
-  useEffect(() => {
-    if (onSettingsChange) {
-      onSettingsChange(effects);
-    }
-  }, [effects, onSettingsChange]);
-
   const handleThemeChange = (theme: Theme) => {
     setCurrentTheme(theme);
     if (onThemeChange) {
@@ -165,10 +166,15 @@ export function ControlPanel({ onSettingsChange, onThemeChange, currentTheme: ex
   };
 
   const toggleEffect = (effect: keyof ControlPanelSettings) => {
-    setEffects(prev => ({
-      ...prev,
-      [effect]: !prev[effect]
-    }));
+    const newEffects = {
+      ...effects,
+      [effect]: !effects[effect]
+    };
+    setEffects(newEffects);
+    // Immediately notify parent
+    if (onSettingsChange) {
+      onSettingsChange(newEffects);
+    }
   };
 
   return (

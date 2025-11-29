@@ -63,7 +63,8 @@ export function VoidBackground() {
         uniforms={uniforms}
         vertexShader={voidVertex}
         fragmentShader={voidFragment}
-        transparent={false}
+        transparent={true}
+        opacity={0.9}
       />
     </mesh>
   );

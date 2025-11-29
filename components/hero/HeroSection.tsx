@@ -163,13 +163,17 @@ export function HeroSection({ textMode }: { textMode: '3d' | 'decode' }) {
         {/* CTA Buttons */}
         <div ref={ctaRef} className="flex gap-3 sm:gap-4 justify-center items-center flex-wrap mb-16 sm:mb-20 px-4">
           <MagneticButton className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-white text-void font-mono font-medium text-xs sm:text-sm md:text-base rounded-full hover:shadow-2xl hover:shadow-white/20 transition-shadow">
-            <span className="hidden sm:inline">EXPLORE PROJECTS</span>
-            <span className="sm:hidden">PROJECTS</span>
+            <a href="#work" className="block">
+              <span className="hidden sm:inline">EXPLORE PROJECTS</span>
+              <span className="sm:hidden">PROJECTS</span>
+            </a>
           </MagneticButton>
 
           <MagneticButton className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-white text-void font-mono font-medium text-xs sm:text-sm md:text-base rounded-full hover:shadow-2xl hover:shadow-white/20 transition-shadow">
-            <span className="hidden sm:inline">INITIALIZE CONTACT</span>
-            <span className="sm:hidden">CONTACT</span>
+            <a href="mailto:barnababobbili098@gmail.com" className="block">
+              <span className="hidden sm:inline">INITIALIZE CONTACT</span>
+              <span className="sm:hidden">CONTACT</span>
+            </a>
           </MagneticButton>
 
           <MagneticButton
